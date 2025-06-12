@@ -1,13 +1,13 @@
 import { ReactNode } from "react";
-import Header from "@/components/header";
-import Sidebar from "@/components/sidebar";
-import Footer from "@/components/footer";
+import Header from "@/components/layout/Header";
+import Sidebar from "@/components/layout/Sidebar";
+import Footer from "@/components/layout/Footer";
 
 type LayoutProps = {
   children: ReactNode;
 };
 
-const Layout = ({ children }: LayoutProps) => {
+const Template = ({ children }: LayoutProps) => {
     return(
         // 1. container principal
         <div className="flex flex-col h-screen">
@@ -24,7 +24,7 @@ const Layout = ({ children }: LayoutProps) => {
                 <div className="flex-1 flex flex-col">
 
                     {/* div do conteudo, empurra o footer para baixo */}
-                    <main className="flex-grow p-8">
+                    <main className="flex-grow p-3">
                         {children}
                     </main>
             
@@ -36,4 +36,4 @@ const Layout = ({ children }: LayoutProps) => {
     )
 }
 
-export default Layout;
+export default Template;
