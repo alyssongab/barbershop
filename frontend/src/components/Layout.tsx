@@ -1,10 +1,14 @@
+import { ReactNode } from "react";
 import Header from "@/components/header";
 import Sidebar from "@/components/sidebar";
 import Footer from "@/components/footer";
 
-const HomeCliente = () => {
-    return(
+type LayoutProps = {
+  children: ReactNode;
+};
 
+const Layout = ({ children }: LayoutProps) => {
+    return(
         // 1. container principal
         <div className="flex flex-col h-screen">
 
@@ -21,9 +25,7 @@ const HomeCliente = () => {
 
                     {/* div do conteudo, empurra o footer para baixo */}
                     <main className="flex-grow p-8">
-                        <h1 className="text-2xl font-bold">Bem-vindo à área do cliente</h1>
-                        <p>conteúdo principal da pagina</p>
-                        {/* resto do conteudo vai aqui */}
+                        {children}
                     </main>
             
                     {/* footer no rodapé da div do conteudo */}
@@ -34,4 +36,4 @@ const HomeCliente = () => {
     )
 }
 
-export default HomeCliente;
+export default Layout;

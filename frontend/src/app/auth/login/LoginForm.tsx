@@ -4,8 +4,9 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import Link from "next/link";
 
-export default function LoginForm() {
+const LoginForm = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
@@ -55,12 +56,14 @@ export default function LoginForm() {
                 </button>
               </div>
 
-              <Button
-                type="submit"
-                className="w-full h-12 bg-[#000000] hover:bg-[#242424] text-[#ffffff] rounded-lg text-lg font-medium mt-8 cursor-pointer"
-              >
-                Entrar
-              </Button>
+              <Link href="../app/cliente/agendamento">
+                <Button
+                  type="button"
+                  className="w-full h-12 bg-[#000000] hover:bg-[#242424] text-[#ffffff] rounded-lg text-lg font-medium mt-8 cursor-pointer"
+                >
+                    Entrar
+                </Button>
+              </Link>
 
               <div className="text-center">
                 <button type="button" className="text-[#242424] underline cursor-pointer">
@@ -74,3 +77,5 @@ export default function LoginForm() {
     </div>
   )
 }
+
+export default LoginForm;
