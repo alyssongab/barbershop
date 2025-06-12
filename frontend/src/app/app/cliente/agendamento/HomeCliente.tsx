@@ -1,12 +1,25 @@
-import Layout from "@/components/Layout";
+import Template from "@/components/layout/Template";
+import CardDetalhes from "@/components/client/CardDetalhes";
+import CardAgendamento from "@/components/client/CardAgendamento";
+import AgendamentosAndamento from "@/components/client/AgendamentosAndamento";
 
 const HomeCliente = () => {
     return(
-        <Layout>
-        {/* This is the "picture" for this page's "frame" */}
-        <h1 className="text-2xl font-bold">Bem-vindo à sua área!</h1>
-        <p>Este é o conteúdo principal da sua página de cliente.</p>
-        </Layout>
+        <Template>
+            <div className="border-b-2 pb-2 mb-4 px-6">
+                <h1 className="text-xl text-[#242424] opacity-70">Agendamento</h1>
+            </div>
+            {/* div dos cards - 2 colunas */}
+            <div className="grid grid-cols-2 justify-items-center">
+                <CardDetalhes />
+                <CardAgendamento />
+            </div>
+
+            {/* div da table */}
+            <div className="mt-8">
+                <AgendamentosAndamento />
+            </div>
+        </Template>
     );
 }
 
