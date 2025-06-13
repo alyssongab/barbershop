@@ -1,9 +1,23 @@
+"use client";
+
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Table, TableRow, TableHead, TableHeader, TableBody, TableCell } from "@/components/ui/table";
 import { Button } from "../ui/button";
 import { X } from "lucide-react";
+import ModalCancelar from "./ModalCancelar";
+import { useState } from "react";
 
 const AgendamentosAndamento = () => {
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   const appointments = [
     {
@@ -51,6 +65,7 @@ const AgendamentosAndamento = () => {
                                 <Button
                                 size="sm"
                                 className="bg-[#c02222] hover:bg-[#a01d1d] text-white px-3 py-1 rounded-md flex items-center gap-1 text-xs cursor-pointer"
+                                onClick={handleOpenModal}
                                 >
                                 <X className="w-3 h-3" />
                                 Cancelar
@@ -61,8 +76,9 @@ const AgendamentosAndamento = () => {
                     </TableBody>
                 </Table>
             </CardContent>
+            {isModalOpen && <ModalCancelar onClose={handleCloseModal} /> }
         </Card>
     )
 }
 
-export default AgendamentosAndamento
+export default AgendamentosAndamento;

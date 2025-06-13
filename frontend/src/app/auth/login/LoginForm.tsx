@@ -65,7 +65,7 @@ const LoginForm = () => {
                 </Button>
               </Link>
 
-              <div className="text-center">
+              <div className="mt-3 text-end">
                 <button type="button" className="text-[#242424] underline cursor-pointer">
                   ou Cadastre-se
                 </button>
