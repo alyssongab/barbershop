@@ -13,7 +13,7 @@ const Sidebar = () => {
                         </Link>
                     </li>
                     <li>
-                        <Link href="/" className="p-3 flex gap-3 items-center justify-start hover:bg-[#414141]">
+                        <Link href="/app/cliente/historico" className="p-3 flex gap-3 items-center justify-start hover:bg-[#414141]">
                             <Clock className="w-5 h-5" />
                             <span className="text-lg">Histórico</span>
                         </Link>

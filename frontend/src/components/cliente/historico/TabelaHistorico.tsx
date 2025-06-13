@@ -2,12 +2,12 @@
 
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Table, TableRow, TableHead, TableHeader, TableBody, TableCell } from "@/components/ui/table";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { X } from "lucide-react";
-import ModalCancelar from "./ModalCancelar";
+import ModalAvaliar from "./ModalAvaliar";
 import { useState } from "react";
 
-const AgendamentosAndamento = () => {
+const TabelaHistorico = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -76,9 +76,9 @@ const AgendamentosAndamento = () => {
                     </TableBody>
                 </Table>
             </CardContent>
-            {isModalOpen && <ModalCancelar onClose={handleCloseModal} /> }
+            {isModalOpen && <ModalAvaliar /> }
         </Card>
     )
 }
 
-export default AgendamentosAndamento;
+export default TabelaHistorico;
