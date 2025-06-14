@@ -34,7 +34,7 @@ const [hover, setHover] = useState(0);
         {/* 2 colunas - detalhes e avaliacao */}
         <div className="grid grid-cols-2 gap-5">
 
-            {/* coluna des detalhes */}
+            {/* coluna dos detalhes */}
             <div className="flex flex-col gap-2">
                     <Card className="bg-[#f1f1f1] py-4">
                         <CardContent className="flex flex-col gap-3">

@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { Calendar, Clock, FileText, LogOut, Plus, X } from "lucide-react";
+import { Calendar, Clock, FileText } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 const Sidebar = () => {
