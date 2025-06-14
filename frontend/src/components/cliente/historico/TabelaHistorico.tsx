@@ -3,7 +3,7 @@
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Table, TableRow, TableHead, TableHeader, TableBody, TableCell } from "@/components/ui/table";
 import { Button } from "../../ui/button";
-import { X } from "lucide-react";
+import { Star } from "lucide-react";
 import ModalAvaliar from "./ModalAvaliar";
 import { useState } from "react";
 
@@ -21,18 +21,31 @@ const TabelaHistorico = () => {
 
   const appointments = [
     {
-      date: "10/06/2025",
-      time: "14:30",
+      id: 1,
+      date: "08/06/2025",
+      time: "17:30",
       service: "Corte degradê",
-      barber: "Matheus Victor",
+      barber: "Luiz David",
       value: "R$ 40,00",
+      rate: 5
     },
     {
-      date: "12/06/2025",
-      time: "15:00",
+      id: 2,
+      date: "10/06/2025",
+      time: "19:00",
       service: "Corte + Barba + Sobrancelha",
       barber: "Matheus Victor",
       value: "R$ 80,00",
+      rate: null
+    },
+    {
+      id: 3,
+      date: "11/06/2025",
+      time: "16:00",
+      service: "Corte + Barba + Sobrancelha",
+      barber: "Bob Esponja",
+      value: "R$ 80,00",
+      rate: "cancelado"
     },
   ]
 
@@ -50,7 +63,7 @@ const TabelaHistorico = () => {
                             <TableHead className="text-[#3d3939] font-medium">Serviço</TableHead>
                             <TableHead className="text-[#3d3939] font-medium">Barbeiro</TableHead>
                             <TableHead className="text-[#3d3939] font-medium">Valor</TableHead>
-                            <TableHead className="w-20"></TableHead>
+                            <TableHead className="text-[#3d3939] font-medium">Avaliação</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -61,22 +74,37 @@ const TabelaHistorico = () => {
                             <TableCell className="text-[#3d3939]">{appointment.service}</TableCell>
                             <TableCell className="text-[#3d3939]">{appointment.barber}</TableCell>
                             <TableCell className="text-[#3d3939] font-medium">{appointment.value}</TableCell>
-                            <TableCell>
-                                <Button
-                                size="sm"
-                                className="bg-[#c02222] hover:bg-[#a01d1d] text-white px-3 py-1 rounded-md flex items-center gap-1 text-xs cursor-pointer"
-                                onClick={handleOpenModal}
-                                >
-                                <X className="w-3 h-3" />
-                                Cancelar
+                            <TableCell className="flex">
+                              {typeof appointment.rate === "number" && (
+                                <>
+                                  {[1, 2, 3, 4, 5].map((star) => (
+                                    <Star
+                                      key={star}
+                                      className={`w-5 h-5 ${star <= appointment.rate ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
+                                      fill={star <= appointment.rate ? "yellow" : "none"}
+                                    />
+                                  ))}
+                                </>
+                              )}
+                              {appointment.rate === null && (
+                                <Button size="sm" variant="outline" onClick={handleOpenModal} 
+                                className="bg-black text-white hover:bg-[#4d4d4d] hover:text-white cursor-pointer">
+                                  Avaliar
                                 </Button>
+                              )}
+                              {appointment.rate === "cancelado" && (
+                                <span className="text-gray-400 opacity-60">cancelado</span>
+                              )}
                             </TableCell>
                         </TableRow>
                     ))}
                     </TableBody>
                 </Table>
             </CardContent>
-            {isModalOpen && <ModalAvaliar /> }
+            {isModalOpen 
+            && 
+            <ModalAvaliar  
+            onClose={handleCloseModal} /> }
         </Card>
     )
 }
