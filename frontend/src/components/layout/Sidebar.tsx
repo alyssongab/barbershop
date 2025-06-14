@@ -7,7 +7,7 @@ const Sidebar = () => {
             <nav>
                 <ul>
                     <li>
-                        <Link href="/" className="bg-[#747474] p-3 flex gap-3 items-center justify-start">
+                        <Link href="/app/cliente/agendamento" className="bg-[#747474] p-3 flex gap-3 items-center justify-start">
                             <Calendar className="w-5 h-5" />
                             <span className="text-lg font-medium">Agendamento</span>
                         </Link>

@@ -17,7 +17,7 @@ const Template = ({ children }: LayoutProps) => {
 
             {/* 2. novo container para o conteudo abaixo do header */}
             <div className="flex flex-1">
-                {/* fica na esquerda, a altura é controlada por esse container */}
+                {/* fica na esquerda, a altura é controlada pelo container pai */}
                 <Sidebar />
 
                 {/* vai ocupar a width restante */}
@@ -33,7 +33,7 @@ const Template = ({ children }: LayoutProps) => {
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
 export default Template;
