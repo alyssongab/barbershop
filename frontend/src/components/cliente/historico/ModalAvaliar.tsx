@@ -6,9 +6,18 @@ import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 interface ModalAvaliarProps {
   onClose: () => void;
+  appointment: {
+    id: number,
+    date: string;
+    time: string;
+    service: string;
+    barber: string;
+    value: number,
+    rate: number
+  };
 }
 
-const ModalAvaliar: React.FC<ModalAvaliarProps> = ({ onClose }) => {
+const ModalAvaliar: React.FC<ModalAvaliarProps> = ({ onClose, appointment }) => {
 
 const [rating, setRating] = useState(0);
 const [hover, setHover] = useState(0);
@@ -33,7 +42,7 @@ const [hover, setHover] = useState(0);
                                 <ScissorsIcon />
                                 <h3 className="text-xl font-normal">Serviço</h3>
                             </CardTitle>
-                            <p>Corte de cabelo</p>
+                            <p>{appointment.service}</p>
                         </CardContent>
                     </Card>
                     <Card className="bg-[#f1f1f1]">
@@ -42,7 +51,7 @@ const [hover, setHover] = useState(0);
                                 <LucideUser />
                                 <h3>Barbeiro</h3>
                             </CardTitle>
-                            <p>Matheus Victor</p>
+                            <p>{appointment.barber}</p>
                         </CardContent>
                     </Card>
                     <Card className="bg-[#f1f1f1]">
@@ -51,7 +60,7 @@ const [hover, setHover] = useState(0);
                                 <Calendar />
                                 <h3>Data e Hora</h3>
                             </CardTitle>
-                            <p>11/06/2025 as 15:01</p>
+                            <p>{appointment.date}</p>
                         </CardContent>
                     </Card>
             </div>

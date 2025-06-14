@@ -5,7 +5,7 @@ import TabelaHistorico from "@/components/cliente/historico/TabelaHistorico";
 const Historico = () => {
     return(
         <Template>
-            <Subheader titulo="Histórico de agendamento"/>
+            <Subheader titulo="Histórico"/>
             <TabelaHistorico />
         </Template>
     )

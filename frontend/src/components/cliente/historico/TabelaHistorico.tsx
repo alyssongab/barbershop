@@ -10,13 +10,16 @@ import { useState } from "react";
 const TabelaHistorico = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
 
-  const handleOpenModal = () => {
+  const handleOpenModal = (appointment: any) => {
+    setSelectedAppointment(appointment)
     setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+    setSelectedAppointment(null);
   };
 
   const appointments = [
@@ -52,7 +55,7 @@ const TabelaHistorico = () => {
     return (
         <Card>
             <CardHeader>
-              <CardTitle className="text-lg font-semibold text-[#3d3939]">Agendamentos em andamento</CardTitle>
+              <CardTitle className="text-lg font-semibold text-[#3d3939]">Histórico de Agendamentos</CardTitle>
             </CardHeader>
             <CardContent>
                 <Table>
@@ -87,7 +90,10 @@ const TabelaHistorico = () => {
                                 </>
                               )}
                               {appointment.rate === null && (
-                                <Button size="sm" variant="outline" onClick={handleOpenModal} 
+                                <Button 
+                                size="sm" 
+                                variant="outline" 
+                                onClick={() => handleOpenModal(appointment)} 
                                 className="bg-black text-white hover:bg-[#4d4d4d] hover:text-white cursor-pointer">
                                   Avaliar
                                 </Button>
@@ -101,12 +107,14 @@ const TabelaHistorico = () => {
                     </TableBody>
                 </Table>
             </CardContent>
-            {isModalOpen 
-            && 
-            <ModalAvaliar  
-            onClose={handleCloseModal} /> }
+            {isModalOpen && selectedAppointment && ( 
+            <ModalAvaliar
+              appointment={selectedAppointment}  
+              onClose={handleCloseModal} 
+              /> 
+            )}
         </Card>
-    )
+    );
 }
 
 export default TabelaHistorico;
