@@ -18,7 +18,7 @@ const Sidebar = () => {
                             }`}
                         >
                             <Calendar className="w-5 h-5" />
-                            <span className="text-lg font-medium">Agendamento</span>
+                            <span className={`text-lg ${pathname === "/app/cliente/agendamento" ? "font-medium" : ""} `}>Agendamento</span>
                         </Link>
                     </li>
                     <li>
@@ -29,7 +29,7 @@ const Sidebar = () => {
                             }`}
                         >
                             <Clock className="w-5 h-5" />
-                            <span className="text-lg">Histórico</span>
+                            <span className={`text-lg ${pathname === "/app/cliente/historico" ? "font-medium" : ""} `}>Histórico</span>
                         </Link>
                     </li>
                     <li className="p-3 flex gap-3 items-center justify-start opacity-30 cursor-not-allowed">

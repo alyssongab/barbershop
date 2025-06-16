@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
-import Header from "@/components/layout/Header";
-import Sidebar from "@/components/layout/Sidebar";
-import Footer from "@/components/layout/Footer";
+import Header from "@/components/layout/cliente/Header";
+import Sidebar from "@/components/layout/cliente/Sidebar";
+import Footer from "@/components/layout/cliente/Footer";
 
 type LayoutProps = {
   children: ReactNode;
