@@ -24,8 +24,7 @@ const [hover, setHover] = useState(0);
 
  return (
     <Dialog open onOpenChange={onClose}>
-      <DialogOverlay className="fixed inset-0 bg-black/50 z-50" />
-      <DialogContent className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 bg-white rounded-md p-6 shadow-lg w-full max-w-[800px]">
+      <DialogContent className="!max-w-none w-1/2">
         <DialogHeader>
           <DialogTitle className="text-2xl">Avaliação de Serviço - Barbearia Santos</DialogTitle>
           <hr />
@@ -65,7 +64,7 @@ const [hover, setHover] = useState(0);
                     </Card>
             </div>
             {/* coluna da avaliacao */}
-            <div className="flex flex-col justify-around">
+            <div className="flex flex-col justify-between">
                 {/* avaliacao */}
                <div>
                     <h3 className="text-center text-xl mb-2">Nota da Avaliação</h3>
@@ -84,12 +83,12 @@ const [hover, setHover] = useState(0);
                             className="focus:outline-none cursor-pointer"
                             aria-label={`Avaliar com ${star} estrela${star > 1 ? "s" : ""}`}
                             >
-                            <Star
-                                className={`w-8 h-8 transition-colors duration-150 ${
-                                (hover || rating) >= star ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
-                                }`}
-                                fill={(hover || rating) >= star ? "yellow" : "none"}
-                            />
+                                <Star
+                                    className={`w-8 h-8 transition-colors duration-150 ${
+                                    (hover || rating) >= star ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
+                                    }`}
+                                    fill={(hover || rating) >= star ? "yellow" : "none"}
+                                />
                             </button>
                         ))}
                         </div>

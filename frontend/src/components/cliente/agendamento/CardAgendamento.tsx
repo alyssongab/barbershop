@@ -1,9 +1,19 @@
+"use client";
+
+import { useState } from "react";
 import { Calendar } from "lucide-react";
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import ModalAgendar from "./ModalAgendar";
 
 const CardAgendamento = () => {
+
+    const [isModalOpen, setModalOpen] = useState(false);
+
+    const handleOpenModal = () => setModalOpen(true);
+    const handleCloseModal = () => setModalOpen(false);
+
     return (
         <Card className="card-detalhes w-3/4 gap-7 hover:scale-105 transform transition-all duration-300">
             <CardHeader>
@@ -13,11 +23,15 @@ const CardAgendamento = () => {
             </div>
             </CardHeader>
             <CardContent>
-                <Button className="bg-[#4aae71] hover:bg-[#3d8f5c] w-4/5 h-[3em] text-white rounded-lg flex items-center justify-center gap-3 cursor-pointer">
+                <Button 
+                className="bg-[#4aae71] hover:bg-[#3d8f5c] w-4/5 h-[3em] text-white rounded-lg flex items-center justify-center gap-3 cursor-pointer"
+                onClick={handleOpenModal}
+                >
                     <Plus />
                     Novo Agendamento
                 </Button>
             </CardContent>
+            {isModalOpen && (< ModalAgendar onClose={handleCloseModal}/>)}
         </Card>
     );
 }

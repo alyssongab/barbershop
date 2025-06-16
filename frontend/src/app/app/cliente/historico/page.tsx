@@ -1,5 +1,5 @@
-import Template from "@/components/layout/Template";
-import Subheader from "@/components/layout/Subheader";
+import Template from "@/components/layout/cliente/Template";
+import Subheader from "@/components/layout/cliente/Subheader";
 import TabelaHistorico from "@/components/cliente/historico/TabelaHistorico";
 
 const Historico = () => {

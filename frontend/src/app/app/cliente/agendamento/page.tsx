@@ -1,8 +1,8 @@
-import Template from "@/components/layout/Template";
+import Template from "@/components/layout/cliente/Template";
 import CardDetalhes from "@/components/cliente/agendamento/CardDetalhes";
 import CardAgendamento from "@/components/cliente/agendamento/CardAgendamento";
 import TabelaAgendamentos from "@/components/cliente/agendamento/TabelaAgendamentos";
-import Subheader from "@/components/layout/Subheader";
+import Subheader from "@/components/layout/cliente/Subheader";
 
 const HomeCliente = () => {
     return(
