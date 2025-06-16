@@ -22,7 +22,7 @@ const Header = () => {
                     <img src="/logo.png" alt="Logo Barbearia" className="w-[65%]"/>
                 </div>
                 <div>
-                    <span className="text-3xl text-white">Painel Cliente</span>
+                    <span className="text-3xl text-white font-medium">Painel Cliente</span>
                 </div>
             </Link>
 
