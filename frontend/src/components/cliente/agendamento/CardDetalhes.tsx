@@ -3,7 +3,7 @@ import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/com
 
 const CardDetalhes = () => {
     return (
-        <Card className="card-detalhes w-3/4 gap-1 hover:scale-105 transform transition-all duration-300">
+        <Card className="card-detalhes w-3/5 gap-1 hover:scale-105 transform transition-all duration-300">
             <CardHeader>
             <div className="flex items-center justify-between">
                 <CardTitle className="text-md font-medium text-[#3d3939]">Próximo agendamento</CardTitle>

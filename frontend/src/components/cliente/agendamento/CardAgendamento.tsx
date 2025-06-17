@@ -15,7 +15,7 @@ const CardAgendamento = () => {
     const handleCloseModal = () => setModalOpen(false);
 
     return (
-        <Card className="card-detalhes w-3/4 gap-7 hover:scale-105 transform transition-all duration-300">
+        <Card className="card-detalhes w-3/5 gap-7 hover:scale-105 transform transition-all duration-300">
             <CardHeader>
             <div className="flex items-center justify-between">
                 <CardTitle className="text-lg font-medium text-[#3d3939]">Marcar agendamento</CardTitle>

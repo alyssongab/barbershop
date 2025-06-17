@@ -59,7 +59,7 @@ const TabelaAgendamentos = () => {
           </TableHeader>
           <TableBody>
             {appointments.map((appointment, index) => (
-              <TableRow key={index} className="border-b border-[#e4e4e4]">
+              <TableRow key={index} className="border-b border-[#e4e4e4] text-lg">
                 <TableCell className="text-[#3d3939]">{appointment.date}</TableCell>
                 <TableCell className="text-[#3d3939]">{appointment.time}</TableCell>
                 <TableCell className="text-[#3d3939]">{appointment.service}</TableCell>
