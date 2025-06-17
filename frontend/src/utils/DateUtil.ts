@@ -20,7 +20,7 @@ export const formatDateForDisplay = (date: Date): string => {
     });
 }
 
-export const isAvailableDate = (date: Date): boolean => {
+export const isDateAvailable = (date: Date): boolean => {
     const today = new Date();
     today.setHours(0, 0, 0, 0); // Zera as horas, minutos, segundos e milissegundos
 

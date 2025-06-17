@@ -24,7 +24,7 @@ const CardAgendamento = () => {
             </CardHeader>
             <CardContent>
                 <Button 
-                className="bg-[#4aae71] hover:bg-[#3d8f5c] w-4/5 h-[3em] text-white rounded-lg flex items-center justify-center gap-3 cursor-pointer"
+                className="bg-[#4aae71] hover:bg-[#3d8f5c] w-3/4 h-[3em] text-white rounded-lg flex items-center justify-center gap-3 cursor-pointer"
                 onClick={handleOpenModal}
                 >
                     <Plus />

@@ -71,7 +71,7 @@ const TabelaHistorico = () => {
                     </TableHeader>
                     <TableBody>
                     {appointments.map((appointment, index) => (
-                        <TableRow key={index} className="border-b border-[#e4e4e4]">
+                        <TableRow key={index} className="border-b border-[#e4e4e4] text-lg">
                             <TableCell className="text-[#3d3939]">{appointment.date}</TableCell>
                             <TableCell className="text-[#3d3939]">{appointment.time}</TableCell>
                             <TableCell className="text-[#3d3939]">{appointment.service}</TableCell>
@@ -99,7 +99,7 @@ const TabelaHistorico = () => {
                                 </Button>
                               )}
                               {appointment.rate === "cancelado" && (
-                                <span className="text-gray-400 opacity-60">cancelado</span>
+                                <span className="text-gray-400 opacity-60">Cancelado</span>
                               )}
                             </TableCell>
                         </TableRow>
