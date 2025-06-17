@@ -276,7 +276,7 @@ const ModalAgendar = ({ onClose }: ModalAgendarProps) => {
                 </div>
 
                 {/* Step Content */}
-                <div className="p-3 mb-8 min-h-[400px] flex-1 overflow-y-visible">{renderStepContent()}</div>
+                <div className="">{renderStepContent()}</div>
 
                 <DialogFooter className="mt-auto !flex !justify-between">
                         <Button
@@ -293,7 +293,7 @@ const ModalAgendar = ({ onClose }: ModalAgendarProps) => {
                         type="button"
                         className="cursor-pointer bg-[#000000] hover:bg-[#2e2e2e]"
                         onClick={handleNext}
-                        disabled={!isStepValid(currentStep) || currentStep === 4}
+                        disabled={!isStepValid(currentStep)}
                     >
                         Próximo
                         <ArrowRight />
