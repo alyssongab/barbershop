@@ -13,7 +13,7 @@ const Sidebar = () => {
                     {/* home */}
                     <li>
                         <Link
-                            href="#"
+                            href="/app/barber/home"
                             className={`p-3 flex gap-3 items-center justify-start ${
                                 pathname === "/app/barber/home" ? "bg-[#747474]" : "hover:bg-[#414141]"
                             }`}
@@ -26,7 +26,7 @@ const Sidebar = () => {
                     {/* agenda */}
                     <li>
                         <Link
-                            href="#"
+                            href="/app/barber/agenda"
                             className={`p-3 flex gap-3 items-center justify-start ${
                                 pathname === "/app/barber/agenda" ? "bg-[#747474]" : "hover:bg-[#414141]"
                             }`}
@@ -39,7 +39,7 @@ const Sidebar = () => {
                     {/* historico */}
                     <li>
                         <Link
-                            href="#"
+                            href="/app/barber/historico"
                             className={`p-3 flex gap-3 items-center justify-start ${
                                 pathname === "/app/barber/historico" ? "bg-[#747474]" : "hover:bg-[#414141]"
                             }`}
