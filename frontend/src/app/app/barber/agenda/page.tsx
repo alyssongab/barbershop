@@ -1,6 +1,7 @@
 import Template from "@/components/layout/barber/Template";
 import Subheader from "@/components/layout/barber/Subheader";
 import { CardData, CardTotal, CardFaturamento } from "@/components/barber/agenda/CardsAgenda";
+import Agendamentos from "@/components/barber/agenda/Agendamentos";
 
 const AgendaBarber = () => {
     return(
@@ -17,6 +18,11 @@ const AgendaBarber = () => {
                 <div className="flex-1 min-w-[200px]">
                     <CardFaturamento />
                 </div>
+            </div>
+
+            {/* agenda */}
+            <div className="mt-5">
+                <Agendamentos />
             </div>
         </Template>
     )
