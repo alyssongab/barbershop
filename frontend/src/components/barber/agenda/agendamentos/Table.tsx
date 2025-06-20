@@ -1,4 +1,7 @@
-import { columns, Agendamento } from "./Columns";
+"use client";
+
+import { useState } from "react";
+import { columns as baseColumns, Agendamento } from "./Columns";
 import { DataTable } from "./DataTable";
 
 const agendamentos: Agendamento[] = [
@@ -37,11 +40,32 @@ const agendamentos: Agendamento[] = [
 ];
 
 const AgendaTabela = () => {
-    return(
-        <div className="container mx-auto py-5">
-            <DataTable columns={columns} data={agendamentos} />
-        </div>
+  const [data, setData] = useState<Agendamento[]>(agendamentos);
+
+  const handleStatusChange = (id: number, newStatus: Agendamento["status"]) => {
+    setData(prev =>
+      prev.map(item =>
+        item.id === id ? { ...item, status: newStatus } : item
+      )
     );
-}
+  };
+
+  // Only override the "actions" column
+  const columns = baseColumns.map(col =>
+    col.id === "actions"
+      ? {
+          ...col,
+          cell: ({ row }: any) =>
+            (baseColumns.find(c => c.id === "actions")?.cell as any)?.({ row, handleStatusChange }),
+        }
+      : col
+  );
+
+  return (
+    <div className="container mx-auto py-5">
+      <DataTable columns={columns} data={data} />
+    </div>
+  );
+};
 
 export default AgendaTabela;
