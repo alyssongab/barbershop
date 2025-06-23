@@ -1,11 +1,13 @@
 import Template from "@/components/layout/barber/Template";
 import Subheader from "@/components/layout/barber/Subheader";
 import { CardTotal, CardAvaliacao, CardMedia } from "@/components/barber/historico/CardsHistorico";
+import TabelaHistorico from "@/components/barber/historico/TabelaHistorico";
 
 const HistoricoBarber = () => {
     return(
         <Template>
             <Subheader titulo="Histórico"/>
+            {/* cards */}
             <div className="flex flex-col gap-4 md:flex-row md:gap-6 items-center">
                 <div className="flex-1 min-w-[200px]">
                     <CardTotal />
@@ -16,6 +18,10 @@ const HistoricoBarber = () => {
                 <div className="flex-1 min-w-[200px]">
                     <CardMedia />
                 </div>
+            </div>
+            {/* tabela */}
+            <div className="mt-4">
+                <TabelaHistorico />
             </div>
         </Template>
     )
