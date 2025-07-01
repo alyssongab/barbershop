@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { Calendar, Clock, CalendarCheck, FileText, Users } from "lucide-react";
+import { Home, FileText, Users } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 const Sidebar = () => {
@@ -13,7 +13,7 @@ const Sidebar = () => {
                     {/* home */}
                     <li className="flex gap-3 items-center justify-start opacity-30 cursor-not-allowed">
                         <div className="flex gap-3 items-center justify-start side-items side-items">
-                            <FileText className="w-5 h-5" />
+                            <Home className="w-5 h-5" />
                             <span className="text-lg">Home</span>
                         </div>
                     </li>

@@ -14,6 +14,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: '/app/admin',
+        destination: '/app/admin/gerenciamento',
+        permanent: true,
+      },
+      {
         // temporario
         source: '/app',
         destination: '/auth/login',
