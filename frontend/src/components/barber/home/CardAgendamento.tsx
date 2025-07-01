@@ -3,7 +3,7 @@ import { Calendar } from "lucide-react";
 
 const CardAgendamento = () => {
     return (
-        <Card className="card-detalhes w-1/3 gap-1 hover:scale-105 transform transition-all duration-300">
+        <Card className="w-1/3 gap-1 transform transition-all duration-300">
             <CardHeader>
                 <div className="flex items-center justify-between">
                     <CardTitle className="text-md font-medium text-[#3d3939]">Próximo agendamento</CardTitle>

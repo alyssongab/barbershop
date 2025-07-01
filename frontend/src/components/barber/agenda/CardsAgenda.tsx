@@ -72,7 +72,7 @@ export function CardFaturamento() {
                 <CardTitle className="opacity-80">Faturamento</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
-                <p className="text-2xl font-semibold">R$100,00</p>
+                <p className="text-2xl font-semibold">R$ 100,00</p>
                 <CardDescription>Concluídos</CardDescription>
             </CardContent>
         </Card>
