@@ -4,11 +4,13 @@ package com.rma.barbersantos.services;
 import com.rma.barbersantos.model.*;
 import com.rma.barbersantos.model.dto.AgendamentoDTO;
 import com.rma.barbersantos.model.dto.AgendamentoResponseDTO;
+import com.rma.barbersantos.model.dto.ProximoAgendamentoDTO;
 import com.rma.barbersantos.repository.AgendamentoRepository;
 import com.rma.barbersantos.repository.ServicoRepository;
 import com.rma.barbersantos.repository.UsuarioRepository;
 import com.rma.barbersantos.services.exceptions.RecursoNaoEncontradoException;
 import com.rma.barbersantos.services.exceptions.RegraDeNegocioException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -62,9 +64,25 @@ public class AgendamentoService {
     }
 
     // NOVO: Listar todos os agendamentos
-    public List<AgendamentoResponseDTO> listarTodos() {
+    public List<AgendamentoResponseDTO> listarTodosParaAdmin() {
         return agendamentoRepository.findAll().stream()
-                .map(AgendamentoResponseDTO::new) // Converte cada Agendamento para AgendamentoResponseDTO
+                .map(AgendamentoResponseDTO::new)
+                .toList();
+    }
+
+    // NOVO: Método específico para o cliente
+    public List<AgendamentoResponseDTO> listarPorCliente() {
+        Usuario clienteLogado = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return agendamentoRepository.findByCliente(clienteLogado).stream()
+                .map(AgendamentoResponseDTO::new)
+                .toList();
+    }
+
+    // NOVO: Método específico para o barbeiro
+    public List<AgendamentoResponseDTO> listarPorBarbeiro() {
+        Usuario barbeiroLogado = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return agendamentoRepository.findByBarbeiro(barbeiroLogado).stream()
+                .map(AgendamentoResponseDTO::new)
                 .toList();
     }
 
@@ -97,5 +115,20 @@ public class AgendamentoService {
 
         Agendamento agendamentoSalvo = agendamentoRepository.save(agendamento);
         return new AgendamentoResponseDTO(agendamentoSalvo);
+    }
+
+    public List<ProximoAgendamentoDTO> listarProximosDoBarbeiro() {
+        // Pega o barbeiro logado
+        Usuario barbeiroLogado = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        // Chama o novo método do repositório
+        List<Agendamento> agendamentos = agendamentoRepository
+                .findFirst3ByBarbeiroAndStatusAndDataHoraAgendamentoAfterOrderByDataHoraAgendamentoAsc(
+                        barbeiroLogado, StatusAgendamento.AGENDADO, LocalDateTime.now());
+
+        // Converte para o DTO enxuto e retorna
+        return agendamentos.stream()
+                .map(ProximoAgendamentoDTO::new)
+                .toList();
     }
 }

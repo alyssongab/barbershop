@@ -2,6 +2,7 @@ package com.rma.barbersantos.repository;
 
 import com.rma.barbersantos.model.Agendamento;
 import com.rma.barbersantos.model.Servico;
+import com.rma.barbersantos.model.StatusAgendamento;
 import com.rma.barbersantos.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -25,4 +26,10 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Intege
     List<Agendamento> findOverlappingAppointments(Usuario barbeiro, LocalDateTime horaInicio, LocalDateTime horaFim);
 
     boolean existsByServico(Servico servico); // Para a validação de exclusão
+
+    // NOVO MeTODO: O nome do metodo é traduzido pelo Spring para a consulta SQL!
+    // "Busque os 3 primeiros (First3) por Barbeiro E por Status Onde a Data/Hora é depois de (After)
+    // Ordenado por Data/Hora Ascendente (Asc)"
+    List<Agendamento> findFirst3ByBarbeiroAndStatusAndDataHoraAgendamentoAfterOrderByDataHoraAgendamentoAsc(
+            Usuario barbeiro, StatusAgendamento status, LocalDateTime data);
 }

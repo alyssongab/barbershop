@@ -3,6 +3,7 @@ package com.rma.barbersantos.controller;
 import com.rma.barbersantos.model.Agendamento;
 import com.rma.barbersantos.model.dto.AgendamentoDTO;
 import com.rma.barbersantos.model.dto.AgendamentoResponseDTO;
+import com.rma.barbersantos.model.dto.ProximoAgendamentoDTO;
 import com.rma.barbersantos.services.AgendamentoService;
 import com.rma.barbersantos.services.exceptions.RecursoNaoEncontradoException;
 import com.rma.barbersantos.services.exceptions.RegraDeNegocioException;
@@ -23,7 +24,7 @@ public class AgendamentoController {
         this.agendamentoService = agendamentoService;
     }
 
-    // Criar
+    // para o CLIENTE criar agendamentos
     @PostMapping
     public ResponseEntity<?> criarAgendamento(@RequestBody AgendamentoDTO agendamentoDTO) {
         try {
@@ -36,12 +37,41 @@ public class AgendamentoController {
         }
     }
 
-    // Listar todos
-    @GetMapping
-    public ResponseEntity<List<AgendamentoResponseDTO>> listarTodos() {
-        List<AgendamentoResponseDTO> agendamentos = agendamentoService.listarTodos();
+    // NOVO ENDPOINT para a homepage do barbeiro
+    @GetMapping("/proximos")
+    public ResponseEntity<List<ProximoAgendamentoDTO>> listarProximos() {
+        var proximos = agendamentoService.listarProximosDoBarbeiro();
+        return ResponseEntity.ok(proximos);
+    }
+
+    // ----------------------------------------------------------------
+    // ENDPOINTS DE LISTAGEM POR PERFIL
+    // ----------------------------------------------------------------
+
+    // Endpoint para o ADMIN
+    @GetMapping("/admin/todos")
+    public ResponseEntity<List<AgendamentoResponseDTO>> listarTodosParaAdmin() {
+        var agendamentos = agendamentoService.listarTodosParaAdmin();
         return ResponseEntity.ok(agendamentos);
     }
+
+    // Endpoint para o CLIENTE
+    @GetMapping("/meus-agendamentos")
+    public ResponseEntity<List<AgendamentoResponseDTO>> listarDoCliente() {
+        var agendamentos = agendamentoService.listarPorCliente();
+        return ResponseEntity.ok(agendamentos);
+    }
+
+    // Endpoint para o BARBEIRO
+    @GetMapping("/minha-agenda")
+    public ResponseEntity<List<AgendamentoResponseDTO>> listarDoBarbeiro() {
+        var agendamentos = agendamentoService.listarPorBarbeiro();
+        return ResponseEntity.ok(agendamentos);
+    }
+
+    // ----------------------------------------------------------------
+    // ENDPOINTS DE ITEM ÚNICO
+    // ----------------------------------------------------------------
 
     // Buscar por ID
     @GetMapping("/{id}")

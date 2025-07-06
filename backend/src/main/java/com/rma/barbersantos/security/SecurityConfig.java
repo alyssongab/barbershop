@@ -50,17 +50,21 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        // Rotas Públicas: Permitimos o acesso sem autenticação
+                        // Rotas Públicas
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/usuarios").permitAll() // Permitir que novos usuários se cadastrem
+                        .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
 
-                        // Rotas de ADMIN: Apenas usuários com o papel 'ADMIN' podem acessar
-                        .requestMatchers(HttpMethod.POST, "/servicos").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/servicos/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/servicos/**").hasRole("ADMIN")
+                        // Rotas de ADMIN
+                        .requestMatchers("/servicos/**").hasRole("ADMIN") // Simplificado
+                        .requestMatchers("/agendamentos/admin/**").hasRole("ADMIN")
 
-                        // Rotas de CLIENTE: Apenas usuários com o papel 'CLIENTE' podem criar agendamentos
+                        // Rotas de BARBEIRO
+                        .requestMatchers("/agendamentos/proximos").hasRole("BARBEIRO")
+                        .requestMatchers("/agendamentos/minha-agenda").hasRole("BARBEIRO")
+
+                        // Rotas de CLIENTE
                         .requestMatchers(HttpMethod.POST, "/agendamentos").hasRole("CLIENTE")
+                        .requestMatchers("/agendamentos/meus-agendamentos").hasRole("CLIENTE")
 
                         // Qualquer outra requisição precisa estar autenticada
                         .anyRequest().authenticated()
