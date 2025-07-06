@@ -15,7 +15,7 @@ public class Agendamento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY) // Muitos agendamentos para UM cliente
     @JoinColumn(name = "id_cliente", nullable = false) // Chave estrangeira

@@ -15,7 +15,7 @@ public class Avaliacao {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @OneToOne(fetch = FetchType.LAZY) // Uma avaliação para UM agendamento
     @JoinColumn(name = "id_agendamento", unique = true, nullable = false)
