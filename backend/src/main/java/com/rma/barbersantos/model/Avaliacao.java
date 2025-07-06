@@ -22,7 +22,7 @@ public class Avaliacao {
     private Agendamento agendamento;
 
     @Column(nullable = false)
-    private Integer nota;
+    private Byte nota;
 
     private String comentario;
 
