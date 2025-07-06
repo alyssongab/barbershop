@@ -1,40 +1,83 @@
 package com.rma.barbersantos.model;
 
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.time.LocalDateTime;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-@Entity // Anotação que diz ao JPA que esta classe é uma entidade do banco
-@Table(name = "usuarios") // Mapeia para a tabela "usuarios"
-@Data // Lombok: gera getters, setters, etc.
-@NoArgsConstructor // Lombok: gera um construtor sem argumentos
-@AllArgsConstructor // Lombok: gera um construtor com todos os argumentos
-public class Usuario {
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
+
+@Entity
+@Table(name = "usuarios")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Usuario implements UserDetails { // Implementa a interface UserDetails
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    // ... outros campos (nome, email, etc.) sem alteração
     private String nome;
-
-    @Column(unique = true) // Garante que o email seja único
+    @Column(unique = true)
     private String email;
-
     private String senha;
-
     private String telefone;
-
-    @Enumerated(EnumType.STRING) // Diz ao JPA para salvar o Enum como String ('cliente', 'barbeiro', 'admin')
+    @Enumerated(EnumType.STRING)
     @Column(name = "nivel_acesso")
     private NivelAcesso nivelAcesso;
-
     @Column(name = "data_cadastro", updatable = false)
     private LocalDateTime dataCadastro;
 
-    @PrePersist // Define a data de cadastro automaticamente antes de salvar
+    @PrePersist
     protected void onCreate() {
         dataCadastro = LocalDateTime.now();
+    }
+
+    // MÉTODOS DA INTERFACE UserDetails
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // Define os "papéis" ou "permissões" do usuário.
+        // No nosso caso, o papel é o próprio NivelAcesso (ex: ROLE_ADMIN, ROLE_BARBEIRO).
+        return List.of(new SimpleGrantedAuthority("ROLE_" + nivelAcesso.name()));
+    }
+
+    @Override
+    public String getPassword() {
+        return this.senha; // Retorna a senha (já criptografada)
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email; // O "username" para o Spring Security será o e-mail
+    }
+
+    // Os métodos abaixo controlam o status da conta. Por enquanto, deixaremos todos como 'true'.
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
