@@ -2,6 +2,7 @@ package com.rma.barbersantos.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,10 +11,17 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration // Indica que esta é uma classe de configuração do Spring
 @EnableWebSecurity // Habilita a segurança web do Spring
 public class SecurityConfig {
+
+    private final SecurityFilter securityFilter;
+
+    public SecurityConfig(SecurityFilter securityFilter) {
+        this.securityFilter = securityFilter;
+    }
 
     /**
      * Este Bean define o algoritmo de hashing que usaremos (BCrypt).
@@ -35,25 +43,30 @@ public class SecurityConfig {
      * Este é o coração da nossa configuração de segurança. Ele define como as requisições HTTP
      * serão tratadas.
      */
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                // Desabilitamos o CSRF, pois nossa API será stateless (não usará sessões/cookies).
-                // A autenticação será feita por outros meios, como tokens JWT, no futuro.
                 .csrf(csrf -> csrf.disable())
-
-                // Configuramos a política de gerenciamento de sessão para stateless.
-                // A API não criará ou usará nenhuma sessão HTTP.
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
-                // Configuramos as regras de autorização para as requisições HTTP.
                 .authorizeHttpRequests(authorize -> authorize
-                                // Por enquanto, vamos permitir o acesso a TODOS os endpoints sem autenticação.
-                                // Isso nos permite continuar desenvolvendo e testando os controllers existentes.
-                                // No futuro, mudaremos isso para proteger rotas específicas.
-                                .requestMatchers("/**").permitAll()
-                        // .anyRequest().authenticated() // Usaríamos isso para exigir autenticação para qualquer outra rota.
+                        // Rotas Públicas: Permitimos o acesso sem autenticação
+                        .requestMatchers(HttpMethod.POST, "/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/usuarios").permitAll() // Permitir que novos usuários se cadastrem
+
+                        // Rotas de ADMIN: Apenas usuários com o papel 'ADMIN' podem acessar
+                        .requestMatchers(HttpMethod.POST, "/servicos").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/servicos/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/servicos/**").hasRole("ADMIN")
+
+                        // Rotas de CLIENTE: Apenas usuários com o papel 'CLIENTE' podem criar agendamentos
+                        .requestMatchers(HttpMethod.POST, "/agendamentos").hasRole("CLIENTE")
+
+                        // Qualquer outra requisição precisa estar autenticada
+                        .anyRequest().authenticated()
                 )
+                // Adicionamos nosso filtro personalizado para ser executado ANTES do filtro padrão de autenticação do Spring
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 }
