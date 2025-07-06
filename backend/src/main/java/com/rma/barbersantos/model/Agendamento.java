@@ -1,25 +1,31 @@
 package com.rma.barbersantos.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "agendamentos")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Agendamento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "id_cliente", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY) // Muitos agendamentos para UM cliente
+    @JoinColumn(name = "id_cliente", nullable = false) // Chave estrangeira
     private Usuario cliente;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY) // Muitos agendamentos para UM barbeiro
     @JoinColumn(name = "id_barbeiro", nullable = false)
     private Usuario barbeiro;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY) // Muitos agendamentos podem ter O MESMO serviço
     @JoinColumn(name = "id_servico", nullable = false)
     private Servico servico;
 
@@ -30,94 +36,16 @@ public class Agendamento {
     @Column(nullable = false)
     private StatusAgendamento status;
 
-    @Column(columnDefinition = "TEXT")
     private String observacoes;
 
     @Column(name = "data_criacao", updatable = false)
     private LocalDateTime dataCriacao;
 
-    @OneToOne(mappedBy = "agendamento", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Avaliacao avaliacao;
-
-    // Construtor
-    public Agendamento() {
-    }
-
-    // Getters e Setters
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Usuario getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Usuario cliente) {
-        this.cliente = cliente;
-    }
-
-    public Usuario getBarbeiro() {
-        return barbeiro;
-    }
-
-    public void setBarbeiro(Usuario barbeiro) {
-        this.barbeiro = barbeiro;
-    }
-
-    public Servico getServico() {
-        return servico;
-    }
-
-    public void setServico(Servico servico) {
-        this.servico = servico;
-    }
-
-    public LocalDateTime getDataHoraAgendamento() {
-        return dataHoraAgendamento;
-    }
-
-    public void setDataHoraAgendamento(LocalDateTime dataHoraAgendamento) {
-        this.dataHoraAgendamento = dataHoraAgendamento;
-    }
-
-    public StatusAgendamento getStatus() {
-        return status;
-    }
-
-    public void setStatus(StatusAgendamento status) {
-        this.status = status;
-    }
-
-    public String getObservacoes() {
-        return observacoes;
-    }
-
-    public void setObservacoes(String observacoes) {
-        this.observacoes = observacoes;
-    }
-
-    public LocalDateTime getDataCriacao() {
-        return dataCriacao;
-    }
-
-    public void setDataCriacao(LocalDateTime dataCriacao) {
-        this.dataCriacao = dataCriacao;
-    }
-
-    public Avaliacao getAvaliacao() {
-        return avaliacao;
-    }
-
-    public void setAvaliacao(Avaliacao avaliacao) {
-        this.avaliacao = avaliacao;
-    }
-
     @PrePersist
     protected void onCreate() {
         dataCriacao = LocalDateTime.now();
+        if (status == null) { // Define um status padrão
+            status = StatusAgendamento.AGENDADO;
+        }
     }
 }
