@@ -1,14 +1,17 @@
 package com.rma.barbersantos.controller;
 
 import com.rma.barbersantos.model.Agendamento;
+import com.rma.barbersantos.model.Usuario;
 import com.rma.barbersantos.model.dto.AgendamentoDTO;
 import com.rma.barbersantos.model.dto.AgendamentoResponseDTO;
 import com.rma.barbersantos.model.dto.ProximoAgendamentoDTO;
+import com.rma.barbersantos.model.dto.StatusUpdateRequest;
 import com.rma.barbersantos.services.AgendamentoService;
 import com.rma.barbersantos.services.exceptions.RecursoNaoEncontradoException;
 import com.rma.barbersantos.services.exceptions.RegraDeNegocioException;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -86,6 +89,36 @@ public class AgendamentoController {
     public ResponseEntity<List<AgendamentoResponseDTO>> listarDoBarbeiro() {
         var agendamentos = agendamentoService.listarPorBarbeiro();
         return ResponseEntity.ok(agendamentos);
+    }
+
+    @GetMapping("/minha-agenda-por-data")
+    public ResponseEntity<List<AgendamentoResponseDTO>> getAgendaDoBarbeiroPorData(
+            @AuthenticationPrincipal Usuario barbeiroLogado,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
+
+        // A anotação @AuthenticationPrincipal já injeta o usuário logado, garantindo a segurança
+        List<AgendamentoResponseDTO> agendamentos = agendamentoService.buscarAgendaDoBarbeiroPorData(barbeiroLogado, data);
+        return ResponseEntity.ok(agendamentos);
+    }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<?> atualizarStatus(
+            @PathVariable Integer id,
+            @RequestBody StatusUpdateRequest request,
+            @AuthenticationPrincipal Usuario barbeiroLogado) {
+        try {
+            // A lógica do serviço continua a mesma, retornando a entidade completa
+            Agendamento agendamentoAtualizado = agendamentoService.atualizarStatus(id, request.novoStatus(), barbeiroLogado);
+
+            // ANTES de enviar de volta, convertemos a entidade para o DTO de resposta
+            AgendamentoResponseDTO responseDTO = new AgendamentoResponseDTO(agendamentoAtualizado);
+
+            // Retornamos o DTO no corpo da resposta de sucesso
+            return ResponseEntity.ok(responseDTO);
+
+        } catch (RegraDeNegocioException | RecursoNaoEncontradoException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     // ----------------------------------------------------------------

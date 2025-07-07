@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -162,5 +163,31 @@ public class AgendamentoService {
                 .filter(horario -> !horariosOcupados.contains(horario))
                 .map(horario -> horario.toString()) // Converte para string (ex: "09:00")
                 .collect(Collectors.toList());
+    }
+
+    public List<AgendamentoResponseDTO> buscarAgendaDoBarbeiroPorData(Usuario barbeiro, LocalDate data) {
+        LocalDateTime inicioDoDia = data.atStartOfDay();
+        LocalDateTime fimDoDia = data.atTime(LocalTime.MAX);
+
+        // Podemos reutilizar o método de busca de sobreposição que já temos
+        List<Agendamento> agendamentos = agendamentoRepository.findOverlappingAppointments(barbeiro, inicioDoDia, fimDoDia);
+
+        return agendamentos.stream()
+                .map(AgendamentoResponseDTO::new)
+                .sorted(Comparator.comparing(AgendamentoResponseDTO::dataHoraAgendamento)) // Garante a ordem por horário
+                .collect(Collectors.toList());
+    }
+
+    public Agendamento atualizarStatus(Integer agendamentoId, StatusAgendamento novoStatus, Usuario barbeiroLogado) {
+        Agendamento agendamento = agendamentoRepository.findById(agendamentoId)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Agendamento não encontrado."));
+
+        // REGRA DE SEGURANÇA: Garante que um barbeiro só pode alterar o status do seu próprio agendamento.
+        if (!agendamento.getBarbeiro().getId().equals(barbeiroLogado.getId())) {
+            throw new RegraDeNegocioException("Você não tem permissão para alterar este agendamento.");
+        }
+
+        agendamento.setStatus(novoStatus);
+        return agendamentoRepository.save(agendamento);
     }
 }

@@ -64,17 +64,18 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
 
                         // --- ROTAS DE LEITURA (GET) PARA USUÁRIOS AUTENTICADOS ---
-                        .requestMatchers(HttpMethod.GET, "/servicos").authenticated() // QUALQUER um logado pode VER serviços
-                        .requestMatchers(HttpMethod.GET, "/usuarios/barbeiros").authenticated() // QUALQUER um logado pode VER barbeiros
+                        .requestMatchers(HttpMethod.GET, "/servicos").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/usuarios/barbeiros").authenticated()
 
                         // --- ROTAS DE ADMIN ---
-                        // Apenas ADMIN pode modificar serviços
                         .requestMatchers(HttpMethod.POST, "/servicos").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/servicos/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/servicos/**").hasRole("ADMIN")
                         .requestMatchers("/agendamentos/admin/**").hasRole("ADMIN")
 
                         // --- ROTAS DE BARBEIRO ---
+                        // AQUI ESTÁ A CORREÇÃO: trocamos '**' por '*'
+                        .requestMatchers(HttpMethod.PATCH, "/agendamentos/*/status").hasRole("BARBEIRO")
                         .requestMatchers("/agendamentos/proximos").hasRole("BARBEIRO")
                         .requestMatchers("/agendamentos/minha-agenda").hasRole("BARBEIRO")
 

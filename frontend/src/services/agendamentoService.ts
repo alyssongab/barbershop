@@ -42,3 +42,17 @@ export const criarAgendamento = async (dados: AgendamentoCreateDTO): Promise<Age
   const response = await api.post('/agendamentos', dados);
   return response.data;
 };
+
+export const getAgendaBarbeiroPorData = async (data: string): Promise<Agendamento[]> => {
+  const response = await api.get('/agendamentos/minha-agenda-por-data', {
+    params: { data } // data no formato "YYYY-MM-DD"
+  });
+  return response.data;
+};
+
+type Status = 'AGENDADO' | 'CONCLUIDO' | 'CANCELADO_PELO_CLIENTE' | 'CANCELADO_PELO_SALAO';
+
+export const atualizarStatusAgendamento = async (id: number, novoStatus: Status): Promise<Agendamento> => {
+  const response = await api.patch(`/agendamentos/${id}/status`, { novoStatus });
+  return response.data;
+};
