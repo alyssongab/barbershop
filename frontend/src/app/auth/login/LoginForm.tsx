@@ -76,9 +76,7 @@ const LoginForm = () => {
                   className="mt-2 h-12 border-[#cccccc] rounded-lg bg-[#f2f2f2] focus:border-[#6c63ff] focus:ring-[#6c63ff]"
                   required
                 />
-                <button type="button" className="text-[#242424] mt-4 underline cursor-pointer">
-                  Esqueci minha senha
-                </button>
+
               </div>
 
                {error && <p className="text-red-500 text-sm">{error}</p>}

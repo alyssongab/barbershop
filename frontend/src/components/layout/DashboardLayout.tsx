@@ -52,6 +52,39 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   let headerTitle = "Painel";
 
   // Decide qual configuração usar com base no nível de acesso
+  if (user?.nivelAcesso === 'CLIENTE' && window.location.pathname.startsWith('/app/admin')) {
+    if (typeof window !== 'undefined') {
+      window.location.href = '/app/cliente/agendamento';
+      return null;
+    }
+  }
+  if (user?.nivelAcesso === 'BARBEIRO' && window.location.pathname.startsWith('/app/admin')) {
+    if (typeof window !== 'undefined') {
+      window.location.href = '/app/barber/home';
+      return null;
+    }
+  }
+
+  // Redirecionamento de proteção de rota por perfil
+  if (user?.nivelAcesso === 'CLIENTE' && !window.location.pathname.startsWith('/app/cliente')) {
+    if (typeof window !== 'undefined') {
+      window.location.href = '/app/cliente/agendamento';
+      return null;
+    }
+  }
+  if (user?.nivelAcesso === 'BARBEIRO' && !window.location.pathname.startsWith('/app/barber')) {
+    if (typeof window !== 'undefined') {
+      window.location.href = '/app/barber/home';
+      return null;
+    }
+  }
+  if (user?.nivelAcesso === 'ADMIN' && !window.location.pathname.startsWith('/app/admin')) {
+    if (typeof window !== 'undefined') {
+      window.location.href = '/app/admin/gerenciamento';
+      return null;
+    }
+  }
+
   switch (user?.nivelAcesso) {
     case 'CLIENTE':
       sidebarItems = clienteSidebarItems;

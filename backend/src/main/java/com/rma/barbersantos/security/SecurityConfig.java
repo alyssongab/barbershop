@@ -68,8 +68,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/servicos").authenticated()
                         .requestMatchers(HttpMethod.GET, "/usuarios/barbeiros").authenticated()
 
-                        // --- ROTA DE ADMIN (MAIS SIMPLES AGORA) ---
-                        .requestMatchers("/admin/**").hasRole("ADMIN") // QUALQUER rota /admin/** é para ADMINS
+                        // --- ROTA DE ADMIN (protege todo /admin/**) ---
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
 
                         // --- ROTAS DE BARBEIRO ---
                         .requestMatchers(HttpMethod.PATCH, "/agendamentos/*/status").hasRole("BARBEIRO")
