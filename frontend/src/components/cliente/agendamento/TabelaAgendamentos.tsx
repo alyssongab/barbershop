@@ -1,34 +1,28 @@
 "use client";
 
 import { useState } from "react";
+import { format } from 'date-fns';
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Table, TableRow, TableHead, TableHeader, TableBody, TableCell } from "@/components/ui/table";
 import { Button } from "../../ui/button";
 import { X } from "lucide-react";
 import ModalCancelar from "./ModalCancelar";
+import { Agendamento } from "@/types/agendamento";
+import { cancelarAgendamento } from "@/services/agendamentoService";
 
-const appointments = [
-  {
-    date: "10/06/2025",
-    time: "14:30",
-    service: "Corte degradê",
-    barber: "Matheus Victor",
-    value: "R$ 40,00",
-  },
-  {
-    date: "12/06/2025",
-    time: "15:00",
-    service: "Corte + Barba + Sobrancelha",
-    barber: "Matheus Victor",
-    value: "R$ 80,00",
-  },
-];
+// 1. Crie uma interface para definir as props que o componente recebe
+interface TabelaAgendamentosProps {
+  agendamentos: Agendamento[];
+  onCancelSuccess: (idCancelado: number) => void; // Adicione a nova prop aqui
+}
 
-const TabelaAgendamentos = () => {
+// 2. Use a nova interface na definição do componente
+const TabelaAgendamentos = ({ agendamentos, onCancelSuccess }: TabelaAgendamentosProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [selectedAppointment, setSelectedAppointment] = useState<Agendamento | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleOpenModal = (appointment: any) => {
+  const handleOpenModal = (appointment: Agendamento) => {
     setSelectedAppointment(appointment);
     setIsModalOpen(true);
   };
@@ -37,12 +31,32 @@ const TabelaAgendamentos = () => {
     setIsModalOpen(false);
     setSelectedAppointment(null);
   };
+  
+  const handleConfirmCancel = async () => {
+    if (!selectedAppointment) return;
+
+    setIsSubmitting(true);
+    try {
+        await cancelarAgendamento(selectedAppointment.id);
+        
+        // 3. Chame a função recebida via prop em vez de recarregar a página
+        onCancelSuccess(selectedAppointment.id);
+        
+        handleCloseModal();
+    } catch (error) {
+        alert("Erro ao cancelar o agendamento.");
+    } finally {
+        setIsSubmitting(false);
+    }
+  };
+
 
   return (
     <Card>
+      {/* O resto do seu componente JSX continua exatamente o mesmo... */}
       <CardHeader>
         <CardTitle className="text-lg font-semibold text-[#3d3939]">
-          Agendamentos em andamento
+          Próximos Agendamentos
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -58,13 +72,15 @@ const TabelaAgendamentos = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {appointments.map((appointment, index) => (
-              <TableRow key={index} className="border-b border-[#e4e4e4] text-base">
-                <TableCell className="text-[#3d3939]">{appointment.date}</TableCell>
-                <TableCell className="text-[#3d3939]">{appointment.time}</TableCell>
-                <TableCell className="text-[#3d3939]">{appointment.service}</TableCell>
-                <TableCell className="text-[#3d3939]">{appointment.barber}</TableCell>
-                <TableCell className="text-[#3d3939] font-medium">{appointment.value}</TableCell>
+            {agendamentos.length > 0 ? agendamentos.map((appointment) => (
+              <TableRow key={appointment.id} className="border-b border-[#e4e4e4] text-base">
+                <TableCell className="text-[#3d3939]">{format(new Date(appointment.dataHoraAgendamento), 'dd/MM/yyyy')}</TableCell>
+                <TableCell className="text-[#3d3939]">{format(new Date(appointment.dataHoraAgendamento), 'HH:mm')}</TableCell>
+                <TableCell className="text-[#3d3939]">{appointment.servico.nome}</TableCell>
+                <TableCell className="text-[#3d3939]">{appointment.barbeiro.nome}</TableCell>
+                <TableCell className="text-[#3d3939] font-medium">
+                  {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(appointment.servico.preco)}
+                </TableCell>
                 <TableCell>
                   <Button
                     size="sm"
@@ -76,13 +92,21 @@ const TabelaAgendamentos = () => {
                   </Button>
                 </TableCell>
               </TableRow>
-            ))}
+            )) : (
+              <TableRow>
+                <TableCell colSpan={6} className="text-center text-gray-500 py-4">
+                  Nenhum agendamento futuro encontrado.
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </CardContent>
       {isModalOpen && (
         <ModalCancelar
           onClose={handleCloseModal}
+          onConfirm={handleConfirmCancel}
+          isSubmitting={isSubmitting}
           appointment={selectedAppointment}
         />
       )}

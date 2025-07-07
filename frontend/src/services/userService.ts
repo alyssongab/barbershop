@@ -21,3 +21,13 @@ export const registerUser = async (userData: RegisterUserData) => {
     throw error; // Lança o erro para ser tratado no componente
   }
 };
+
+export interface Barbeiro {
+  id: number;
+  nome: string;
+}
+
+export const getBarbeiros = async (): Promise<Barbeiro[]> => {
+  const response = await api.get('/usuarios/barbeiros');
+  return response.data;
+};

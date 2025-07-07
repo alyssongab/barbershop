@@ -1,13 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { Calendar } from "lucide-react";
+import { Calendar, Plus } from "lucide-react";
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
 import ModalAgendar from "./ModalAgendar";
 
-const CardAgendamento = () => {
+// 1. Define as props que este componente vai receber
+interface CardAgendamentoProps {
+  onAgendamentoSuccess: () => void;
+}
+
+const CardAgendamento = ({ onAgendamentoSuccess }: CardAgendamentoProps) => {
 
     const [isModalOpen, setModalOpen] = useState(false);
 
@@ -31,7 +35,13 @@ const CardAgendamento = () => {
                     Novo Agendamento
                 </Button>
             </CardContent>
-            {isModalOpen && (< ModalAgendar onClose={handleCloseModal}/>)}
+            {isModalOpen && (
+                // 2. Repassa a função recebida para o Modal
+                <ModalAgendar 
+                    onClose={handleCloseModal}
+                    onAgendamentoSuccess={onAgendamentoSuccess} 
+                />
+            )}
         </Card>
     );
 }
