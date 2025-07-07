@@ -13,6 +13,9 @@ const Header = ({ titulo }: HeaderProps) => {
   // 3. Pega os dados do usuário e a função de logout do contexto global
   const { user, logout } = useAuth();
 
+    // Extrai o primeiro nome do usuário
+  const primeiroNome = user?.nome?.split(' ')[0] || '';
+
   return (
     <header className="bg-[#140F0B] w-full h-[70px] flex justify-between p-3">
       {/* parte esquerda */}
@@ -30,7 +33,7 @@ const Header = ({ titulo }: HeaderProps) => {
       <div className="flex items-center gap-5">
         <div className="text-white">
           {/* 5. Usa o nome do usuário vindo do contexto */}
-          <p>Olá, <span className="font-bold">{user?.nome}</span></p>
+          <p>Olá, <span className="font-bold">{primeiroNome}</span></p>
         </div>
         <div>
           {/* 6. Usa a função de logout do contexto */}
