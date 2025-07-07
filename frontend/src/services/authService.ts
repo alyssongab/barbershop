@@ -29,3 +29,15 @@ export const login = async (email: string, senha: string): Promise<LoginResponse
     throw error;
   }
 };
+
+export const getMe = async () => {
+    try {
+        // Note que não precisamos enviar o token aqui. O axios (api) já está
+        // configurado no AuthContext para enviar o token em todas as requisições.
+        const response = await api.get('/usuarios/me');
+        return response.data;
+    } catch (error) {
+        console.error("Erro ao buscar dados do usuário:", error);
+        throw error;
+    }
+}

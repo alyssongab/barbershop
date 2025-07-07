@@ -1,11 +1,11 @@
 "use client";
 
 import { createContext, useState, useContext, useEffect, ReactNode } from 'react';
-import { login as loginService } from '@/services/authService';
+import { login as loginService, getMe } from '@/services/authService'; // Importa getMe
 import api from '@/services/api';
 import { useRouter } from 'next/navigation';
 
-// 1. Tipagem para os dados do usuário que queremos armazenar
+// Tipagem para os dados do usuário
 interface User {
   id: number;
   nome: string;
@@ -13,59 +13,71 @@ interface User {
   nivelAcesso: 'CLIENTE' | 'BARBEIRO' | 'ADMIN';
 }
 
-// 2. Tipagem para o valor que o nosso Contexto vai fornecer
+// Tipagem para o valor do Contexto
 interface AuthContextType {
   isAuthenticated: boolean;
   user: User | null;
   login: (email: string, senha: string) => Promise<void>;
   logout: () => void;
-  loading: boolean;
+  loading: boolean; // Para sabermos quando a verificação inicial terminou
 }
 
-// 3. Criação do Contexto com um valor padrão
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// 4. Criação do "Provedor" do Contexto
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
 
-  // Efeito que roda na inicialização para verificar se já existe um token
+  // Efeito que roda UMA VEZ na inicialização da aplicação
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
-    if (token) {
-      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      // Aqui, o ideal seria ter um endpoint /me para validar o token e buscar os dados do usuário
-      // Por enquanto, vamos simplificar e futuramente adicionar essa validação
-      setLoading(false); // Simulação de verificação
-    } else {
-      setLoading(false);
-    }
+    const initializeAuth = async () => {
+      const token = localStorage.getItem('authToken');
+
+      if (token) {
+        try {
+          // Se tem token, configura o header e busca os dados do usuário
+          api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+          const userData = await getMe();
+          setUser(userData);
+        } catch (error) {
+          // Se o token for inválido ou expirado, limpa tudo
+          console.error("Sessão inválida, fazendo logout.", error);
+          localStorage.removeItem('authToken');
+          delete api.defaults.headers.common['Authorization'];
+        }
+      }
+      setLoading(false); // Finaliza o loading inicial
+    };
+
+    initializeAuth();
   }, []);
 
   const login = async (email: string, senha: string) => {
     const { token } = await loginService(email, senha);
-
-    // Salva o token no localStorage para persistir a sessão
     localStorage.setItem('authToken', token);
-
-    // Adiciona o token aos cabeçalhos padrão do Axios para as próximas requisições
     api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-    // Decodificar o token para pegar os dados do usuário seria o ideal aqui.
-    // Como simplificação, vamos redirecionar. No próximo passo, podemos buscar os dados do usuário.
-    // setUser(dadosDoUsuario);
+    // Após o login, busca os dados do usuário e atualiza o estado
+    const userData = await getMe();
+    setUser(userData);
     
-    // Redireciona para a página de agendamento do cliente
-    router.push('/app/cliente/agendamento'); 
+    // Redireciona com base no nível de acesso
+    if (userData.nivelAcesso === 'BARBEIRO') {
+      router.push('/app/barber/home'); // Exemplo de rota para barbeiro
+    } else if (userData.nivelAcesso === 'ADMIN') {
+      router.push('/app/admin/gerenciamento'); // Exemplo de rota para admin
+    }
+    else {
+      router.push('/app/cliente/agendamento'); // Rota padrão para cliente
+    }
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem('authToken');
     delete api.defaults.headers.common['Authorization'];
-    router.push('/login'); // Redireciona para a página de login
+    router.push('/login');
   };
 
   const value = {
@@ -76,14 +88,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     loading,
   };
 
+  // Enquanto estiver carregando a sessão, não renderiza o conteúdo
+  if (loading) {
+    return <div>Carregando aplicação...</div>; // Ou um componente de Spinner/Loading
+  }
+
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      {children}
     </AuthContext.Provider>
   );
 };
 
-// 5. Hook customizado para facilitar o uso do contexto
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
