@@ -2,42 +2,15 @@
 
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Table, TableRow, TableHead, TableHeader, TableBody, TableCell } from "@/components/ui/table";
-import { Button } from "../../ui/button";
 import { Star } from "lucide-react";
-import { useState } from "react";
+import { Agendamento } from "@/types/agendamento";
+import { format } from "date-fns";
 
-const TabelaHistorico = () => {
+interface TabelaHistoricoProps {
+  historico: Agendamento[];
+}
 
-  const appointments = [
-    {
-      id: 1,
-      date: "08/06/2025",
-      time: "17:30",
-      service: "Corte degradê",
-      client: "Mbappé",
-      value: "R$ 40,00",
-      rate: 5
-    },
-    {
-      id: 2,
-      date: "10/06/2025",
-      time: "19:00",
-      service: "Corte + Barba + Sobrancelha",
-      client: "Haaland",
-      value: "R$ 80,00",
-      rate: null
-    },
-    {
-      id: 3,
-      date: "11/06/2025",
-      time: "16:00",
-      service: "Corte + Barba + Sobrancelha",
-      client: "Yamal",
-      value: "R$ 80,00",
-      rate: "cancelado"
-    },
-  ]
-
+const TabelaHistorico = ({ historico }: TabelaHistoricoProps) => {
     return (
         <Card>
             <CardHeader>
@@ -56,34 +29,33 @@ const TabelaHistorico = () => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                    {appointments.map((appointment, index) => (
-                        <TableRow key={index} className="border-b border-[#e4e4e4] text-base">
-                            <TableCell className="text-[#3d3939]">{appointment.date}</TableCell>
-                            <TableCell className="text-[#3d3939]">{appointment.time}</TableCell>
-                            <TableCell className="text-[#3d3939]">{appointment.service}</TableCell>
-                            <TableCell className="text-[#3d3939]">{appointment.client}</TableCell>
-                            <TableCell className="text-[#3d3939] font-medium">{appointment.value}</TableCell>
-                            <TableCell className="flex">
-                              {typeof appointment.rate === "number" && (
-                                <>
-                                  {[1, 2, 3, 4, 5].map((star) => (
-                                    <Star
-                                      key={star}
-                                      className={`w-5 h-5 ${star <= appointment.rate ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
-                                      fill={star <= appointment.rate ? "yellow" : "none"}
-                                    />
-                                  ))}
-                                </>
-                              )}
-                              {appointment.rate === null && (
-                                <span>Sem avaliação</span>
-                              )}
-                              {appointment.rate === "cancelado" && (
-                                <span className="text-gray-400 opacity-60">Cancelado</span>
-                              )}
-                            </TableCell>
-                        </TableRow>
-                    ))}
+                    {historico.length > 0 ? (
+                        historico.map((appointment) => (
+                            <TableRow key={appointment.id} className="border-b border-[#e4e4e4] text-base">
+                                <TableCell className="text-[#3d3939]">{format(new Date(appointment.dataHoraAgendamento), 'dd/MM/yyyy')}</TableCell>
+                                <TableCell className="text-[#3d3939]">{format(new Date(appointment.dataHoraAgendamento), 'HH:mm')}</TableCell>
+                                <TableCell className="text-[#3d3939]">{appointment.servico.nome}</TableCell>
+                                <TableCell className="text-[#3d3939]">{appointment.cliente.nome}</TableCell>
+                                <TableCell className="text-[#3d3939] font-medium">
+                                    {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(appointment.servico.preco)}
+                                </TableCell>
+                                <TableCell className="flex">
+                                  {appointment.status.startsWith("CANCELADO") && <span className="text-gray-400 opacity-60">Cancelado</span>}
+                                  {appointment.status === "CONCLUIDO" && !appointment.avaliacao && <span className="text-gray-500">Sem avaliação</span>}
+                                  {appointment.status === "CONCLUIDO" && appointment.avaliacao && (
+                                    <div className="flex items-center gap-1">
+                                        <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
+                                        <span className="font-medium">{appointment.avaliacao.nota}</span>
+                                    </div>
+                                  )}
+                                </TableCell>
+                            </TableRow>
+                        ))
+                    ) : (
+                      <TableRow>
+                          <TableCell colSpan={6} className="h-24 text-center">Nenhum histórico encontrado.</TableCell>
+                      </TableRow>
+                    )}
                     </TableBody>
                 </Table>
             </CardContent>

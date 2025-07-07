@@ -3,35 +3,39 @@
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Star } from "lucide-react";
 
-export function CardTotal() {
+interface CardProps {
+  valor: number;
+}
+
+export function CardTotal({ valor }: CardProps) {
     return (
         <Card className="gap-4">
             <CardHeader>
                 <CardTitle className="opacity-80">Total</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
-                <p className="text-2xl font-semibold">4</p>
+                <p className="text-2xl font-semibold">{valor}</p>
                 <CardDescription>Serviço(s) realizados</CardDescription>
             </CardContent>
         </Card>
     );
 }
 
-export function CardAvaliacao() {
+export function CardAvaliacao({ valor }: CardProps) {
     return (
         <Card className="gap-4">
             <CardHeader>
                 <CardTitle className="opacity-80">Total de Avaliações</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
-                <p className="text-2xl font-semibold">1</p>
-                <CardDescription>Avaliação</CardDescription>
+                <p className="text-2xl font-semibold">{valor}</p>
+                <CardDescription>Avaliação(ões) recebida(s)</CardDescription>
             </CardContent>
         </Card>
     );
 }
 
-export function CardMedia() {
+export function CardMedia({ valor }: CardProps) {
     return (
         <Card>
             <CardHeader>
@@ -39,7 +43,8 @@ export function CardMedia() {
             </CardHeader>
             <CardContent className="flex gap-2 justify-start items-center">
                 <Star className="fill-yellow-400 text-yellow-400"/>
-                <p className="text-2xl font-semibold">5</p>
+                {/* Mostra 'N/A' se a média for 0 */}
+                <p className="text-2xl font-semibold">{valor > 0 ? valor.toFixed(1) : 'N/A'}</p>
             </CardContent>
         </Card>
     );

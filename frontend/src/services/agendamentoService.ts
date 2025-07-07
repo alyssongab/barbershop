@@ -62,3 +62,14 @@ export const listarProximosDoBarbeiro = async (): Promise<ProximoAgendamentoDTO[
     const response = await api.get('/agendamentos/proximos');
     return response.data;
 };
+
+// Busca todos os agendamentos (passados e futuros) do barbeiro logado
+export const getMinhaAgendaCompleta = async (): Promise<Agendamento[]> => {
+  try {
+    const response = await api.get('/agendamentos/minha-agenda');
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao buscar agenda completa do barbeiro", error);
+    throw error;
+  }
+};
