@@ -1,5 +1,6 @@
 package com.rma.barbersantos.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -40,6 +41,11 @@ public class Agendamento {
 
     @Column(name = "data_criacao", updatable = false)
     private LocalDateTime dataCriacao;
+
+    // NOVO CAMPO: Adiciona a relação inversa com Avaliacao
+    @OneToOne(mappedBy = "agendamento", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference // Evita loops infinitos de serialização
+    private Avaliacao avaliacao;
 
     @PrePersist
     protected void onCreate() {

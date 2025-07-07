@@ -1,5 +1,6 @@
 package com.rma.barbersantos.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,8 +18,9 @@ public class Avaliacao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToOne(fetch = FetchType.LAZY) // Uma avaliação para UM agendamento
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_agendamento", unique = true, nullable = false)
+    @JsonBackReference
     private Agendamento agendamento;
 
     @Column(nullable = false)

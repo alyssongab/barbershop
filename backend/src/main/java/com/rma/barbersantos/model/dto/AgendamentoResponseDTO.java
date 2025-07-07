@@ -13,7 +13,8 @@ public record AgendamentoResponseDTO(
         ServicoSimplesDTO servico,
         LocalDateTime dataHoraAgendamento,
         StatusAgendamento status,
-        String observacoes
+        String observacoes,
+        AvaliacaoDTO avaliacao // NOVO CAMPO (pode ser nulo)
 ) {
     // Construtor auxiliar para facilitar a conversão da Entidade para o DTO
     public AgendamentoResponseDTO(Agendamento agendamento) {
@@ -24,7 +25,8 @@ public record AgendamentoResponseDTO(
                 new ServicoSimplesDTO(agendamento.getServico().getId(), agendamento.getServico().getNome(), agendamento.getServico().getPreco()),
                 agendamento.getDataHoraAgendamento(),
                 agendamento.getStatus(),
-                agendamento.getObservacoes()
+                agendamento.getObservacoes() != null ? agendamento.getObservacoes() : "",
+                agendamento.getAvaliacao() != null ? new AvaliacaoDTO(agendamento.getAvaliacao()) : null
         );
     }
 }
