@@ -84,6 +84,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/agendamentos").hasRole("CLIENTE")
                         .requestMatchers("/agendamentos/meus-agendamentos").hasRole("CLIENTE")
 
+                        .requestMatchers(HttpMethod.GET, "/usuarios/me").authenticated()
+
                         // Qualquer outra requisição precisa estar autenticada
                         .anyRequest().authenticated()
                 )

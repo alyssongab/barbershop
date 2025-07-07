@@ -1,11 +1,13 @@
 package com.rma.barbersantos.controller;
 
+import com.rma.barbersantos.model.Usuario;
 import com.rma.barbersantos.model.dto.UsuarioCreateDTO;
 import com.rma.barbersantos.model.dto.UsuarioResponseDTO;
 import com.rma.barbersantos.services.UsuarioService;
 import com.rma.barbersantos.services.exceptions.RecursoNaoEncontradoException;
 import com.rma.barbersantos.services.exceptions.RegraDeNegocioException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -46,5 +48,13 @@ public class UsuarioController {
         } catch (RecursoNaoEncontradoException e) {
             return ResponseEntity.status(404).body(e.getMessage());
         }
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UsuarioResponseDTO> getAuthenticatedUser(@AuthenticationPrincipal Usuario usuario) {
+        // O @AuthenticationPrincipal injeta diretamente o objeto Usuario que foi
+        // carregado pelo SecurityFilter a partir do token. É limpo e eficiente.
+        UsuarioResponseDTO usuarioDTO = new UsuarioResponseDTO(usuario);
+        return ResponseEntity.ok(usuarioDTO);
     }
 }
