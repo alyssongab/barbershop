@@ -3,9 +3,11 @@ package com.rma.barbersantos.repository;
 import com.rma.barbersantos.model.NivelAcesso;
 import com.rma.barbersantos.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository // Anotação que indica ao Spring que esta é uma interface de repositório
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
@@ -24,5 +26,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
      * "findByEmail" será traduzido para:
      * SELECT * FROM usuarios WHERE email = ?
      */
-    Usuario findByEmail(String email);
+//    Usuario findByEmail(String email);
+    Optional<UserDetails> findByEmail(String email);
 }

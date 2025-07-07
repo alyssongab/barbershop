@@ -1,5 +1,6 @@
 package com.rma.barbersantos.services;
 
+import com.rma.barbersantos.model.NivelAcesso;
 import com.rma.barbersantos.model.Usuario;
 import com.rma.barbersantos.model.dto.UsuarioCreateDTO;
 import com.rma.barbersantos.model.dto.UsuarioResponseDTO;
@@ -54,6 +55,12 @@ public class UsuarioService {
 
         Usuario usuarioSalvo = usuarioRepository.save(novoUsuario);
         return new UsuarioResponseDTO(usuarioSalvo);
+    }
+
+    public List<UsuarioResponseDTO> listarBarbeiros() {
+        return usuarioRepository.findByNivelAcesso(NivelAcesso.BARBEIRO).stream()
+                .map(UsuarioResponseDTO::new)
+                .collect(Collectors.toList());
     }
 
     // A lógica de "atualizar" e "deletar" pode ser adicionada aqui seguindo o mesmo padrão.

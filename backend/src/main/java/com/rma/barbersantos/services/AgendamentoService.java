@@ -13,8 +13,12 @@ import com.rma.barbersantos.services.exceptions.RegraDeNegocioException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AgendamentoService {
@@ -130,5 +134,33 @@ public class AgendamentoService {
         return agendamentos.stream()
                 .map(ProximoAgendamentoDTO::new)
                 .toList();
+    }
+
+    public List<String> buscarHorariosDisponiveis(Integer barbeiroId, LocalDate data) {
+        // Busca os agendamentos existentes para o barbeiro e data
+        Usuario barbeiro = usuarioRepository.findById(Long.valueOf(barbeiroId))
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Barbeiro não encontrado"));
+
+        LocalDateTime inicioDoDia = data.atStartOfDay();
+        LocalDateTime fimDoDia = data.atTime(LocalTime.MAX);
+
+        List<Agendamento> agendamentosDoDia = agendamentoRepository.findOverlappingAppointments(barbeiro, inicioDoDia, fimDoDia);
+
+        // Extrai os horários já ocupados
+        List<LocalTime> horariosOcupados = agendamentosDoDia.stream()
+                .map(ag -> ag.getDataHoraAgendamento().toLocalTime())
+                .collect(Collectors.toList());
+
+        // Define os horários de funcionamento da barbearia (ex: 9h às 18h, de hora em hora)
+        List<LocalTime> todosOsHorarios = new ArrayList<>();
+        for (int i = 9; i <= 20; i++) {
+            todosOsHorarios.add(LocalTime.of(i, 0));
+        }
+
+        // Filtra para retornar apenas os horários que NÃO estão na lista de ocupados
+        return todosOsHorarios.stream()
+                .filter(horario -> !horariosOcupados.contains(horario))
+                .map(horario -> horario.toString()) // Converte para string (ex: "09:00")
+                .collect(Collectors.toList());
     }
 }

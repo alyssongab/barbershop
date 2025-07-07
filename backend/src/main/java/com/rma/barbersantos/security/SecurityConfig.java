@@ -54,42 +54,37 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                // Desabilitamos CSRF pois usaremos autenticação stateless (via token)
                 .csrf(AbstractHttpConfigurer::disable)
-
-                // Habilitamos a configuração de CORS que definimos no bean abaixo
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-
-                // Definimos a política de sessão como stateless
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
-                // Definimos as regras de autorização para cada endpoint
                 .authorizeHttpRequests(authorize -> authorize
-                        // Permite as requisições de preflight (OPTIONS)
+                        // --- ROTAS PÚBLICAS ---
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-
-                        // Rotas Públicas
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
 
-                        // Rotas de ADMIN
-                        .requestMatchers("/servicos/**").hasRole("ADMIN")
+                        // --- ROTAS DE LEITURA (GET) PARA USUÁRIOS AUTENTICADOS ---
+                        .requestMatchers(HttpMethod.GET, "/servicos").authenticated() // QUALQUER um logado pode VER serviços
+                        .requestMatchers(HttpMethod.GET, "/usuarios/barbeiros").authenticated() // QUALQUER um logado pode VER barbeiros
+
+                        // --- ROTAS DE ADMIN ---
+                        // Apenas ADMIN pode modificar serviços
+                        .requestMatchers(HttpMethod.POST, "/servicos").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/servicos/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/servicos/**").hasRole("ADMIN")
                         .requestMatchers("/agendamentos/admin/**").hasRole("ADMIN")
 
-                        // Rotas de BARBEIRO
+                        // --- ROTAS DE BARBEIRO ---
                         .requestMatchers("/agendamentos/proximos").hasRole("BARBEIRO")
                         .requestMatchers("/agendamentos/minha-agenda").hasRole("BARBEIRO")
 
-                        // Rotas de CLIENTE
+                        // --- ROTAS DE CLIENTE ---
                         .requestMatchers(HttpMethod.POST, "/agendamentos").hasRole("CLIENTE")
                         .requestMatchers("/agendamentos/meus-agendamentos").hasRole("CLIENTE")
-
-                        .requestMatchers(HttpMethod.GET, "/usuarios/me").authenticated()
 
                         // Qualquer outra requisição precisa estar autenticada
                         .anyRequest().authenticated()
                 )
-                // Adicionamos nosso filtro de segurança antes do filtro padrão do Spring
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

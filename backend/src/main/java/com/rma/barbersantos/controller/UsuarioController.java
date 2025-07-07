@@ -57,4 +57,10 @@ public class UsuarioController {
         UsuarioResponseDTO usuarioDTO = new UsuarioResponseDTO(usuario);
         return ResponseEntity.ok(usuarioDTO);
     }
+
+    @GetMapping("/barbeiros")
+    public ResponseEntity<List<UsuarioResponseDTO>> listarBarbeiros() {
+        // Vamos delegar a lógica para o serviço
+        return ResponseEntity.ok(usuarioService.listarBarbeiros());
+    }
 }
