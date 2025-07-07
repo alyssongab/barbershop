@@ -4,6 +4,7 @@ import { createContext, useState, useContext, useEffect, ReactNode } from 'react
 import { login as loginService, getMe } from '@/services/authService'; // Importa getMe
 import api from '@/services/api';
 import { useRouter } from 'next/navigation';
+import { Loading } from '@/components/ui/loading';
 
 // Tipagem para os dados do usuário
 interface User {
@@ -77,7 +78,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(null);
     localStorage.removeItem('authToken');
     delete api.defaults.headers.common['Authorization'];
-    router.push('/login');
+    router.push('/auth/login');
   };
 
   const value = {
@@ -90,7 +91,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // Enquanto estiver carregando a sessão, não renderiza o conteúdo
   if (loading) {
-    return <div>Carregando aplicação...</div>; // Ou um componente de Spinner/Loading
+    return <Loading /> // Ou um componente de Spinner/Loading
   }
 
   return (

@@ -1,13 +1,13 @@
-import Template from "@/components/layout/cliente/Template";
-import Subheader from "@/components/layout/cliente/Subheader";
+import DashboardLayout from "@/components/layout/DashboardLayout";
+import Subheader from "@/components/layout/Subheader";
 import TabelaHistorico from "@/components/cliente/historico/TabelaHistorico";
 
 const Historico = () => {
     return(
-        <Template>
+        <DashboardLayout>
             <Subheader titulo="Histórico"/>
             <TabelaHistorico />
-        </Template>
+        </DashboardLayout>
     )
 }
 

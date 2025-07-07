@@ -1,11 +1,11 @@
-import Template from "@/components/layout/barber/Template";
+import DashboardLayout from "@/components/layout/DashboardLayout";
+import Subheader from "@/components/layout/Subheader";
 import CardAgendamento from "@/components/barber/home/CardAgendamento";
-import Subheader from "@/components/layout/cliente/Subheader";
 import TabelaGeral from "@/components/barber/home/TabelaGeral";
 
 const HomeBarber = () => {
     return(
-        <Template>
+        <DashboardLayout>
             <Subheader titulo="Home" />
             {/* div dos cards */}
             <div className="flex justify-items-center">
@@ -16,7 +16,7 @@ const HomeBarber = () => {
             <div className="mt-8">
                 <TabelaGeral />
             </div>
-        </Template>
+        </DashboardLayout>
     )
 }
 

@@ -16,6 +16,7 @@ import Header from "./Header";
 import Sidebar, { SidebarItem } from "./Sidebar";
 import Footer from "./Footer";
 import { useAuth } from "@/contexts/AuthContext";
+import { Loading } from "../ui/loading";
 
 // --- CONFIGURAÇÃO DOS ITENS DA SIDEBAR PARA CADA PERFIL ---
 
@@ -37,7 +38,6 @@ const barbeiroSidebarItems: SidebarItem[] = [
 const adminSidebarItems: SidebarItem[] = [
   { href: "#", label: "Home", icon: Home, disabled: true }, // Link desabilitado
   { href: "/app/admin/gerenciamento", label: "Gerenciamento", icon: Users },
-  { href: "/app/admin/servicos", label: "Serviços", icon: Scissors }, // Adicionando um exemplo
 ];
 // -------------------------------------------------------------------
 
@@ -46,7 +46,7 @@ type DashboardLayoutProps = {
 };
 
 const DashboardLayout = ({ children }: DashboardLayoutProps) => {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
 
   let sidebarItems: SidebarItem[] = [];
   let headerTitle = "Painel";
@@ -67,9 +67,18 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       break;
   }
 
-  // Se o usuário ainda não carregou, pode-se mostrar um loader
+
+  // Usamos o estado de loading do nosso AuthContext
+  if (loading) {
+    return <Loading />; // Mostra nosso componente de loading em tela cheia
+  }
+
+  // Se não estiver carregando e não tiver usuário (ex: token inválido), 
+  // poderíamos redirecionar ou mostrar uma mensagem de erro.
+  // Por enquanto, o AuthProvider já lida com o redirecionamento.
   if (!user) {
-    return <div>Carregando...</div>; 
+    // Este caso pode acontecer brevemente antes do redirecionamento do AuthContext
+    return <Loading />;
   }
 
   return (

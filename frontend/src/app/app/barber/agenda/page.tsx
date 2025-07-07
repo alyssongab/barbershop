@@ -1,11 +1,11 @@
-import Template from "@/components/layout/barber/Template";
-import Subheader from "@/components/layout/barber/Subheader";
+import DashboardLayout from "@/components/layout/DashboardLayout";
+import Subheader from "@/components/layout/Subheader";
 import { CardData, CardTotal, CardFaturamento } from "@/components/barber/agenda/CardsAgenda";
 import Agendamentos from "@/components/barber/agenda/Agendamentos";
 
 const AgendaBarber = () => {
     return(
-        <Template>
+        <DashboardLayout>
             <Subheader titulo="Agenda"/>
             {/* cards */}
             <div className="flex flex-col gap-4 md:flex-row md:gap-6 w-full items-center">
@@ -24,7 +24,7 @@ const AgendaBarber = () => {
             <div className="mt-5">
                 <Agendamentos />
             </div>
-        </Template>
+        </DashboardLayout>
     )
 }
 

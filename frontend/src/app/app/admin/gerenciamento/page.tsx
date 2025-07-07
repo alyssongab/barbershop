@@ -1,13 +1,13 @@
-import Template from "@/components/layout/admin/Template";
-import Subheader from "@/components/layout/admin/Subheader";
+import DashboardLayout from "@/components/layout/DashboardLayout";
+import Subheader from "@/components/layout/Subheader";
 import Abas from "@/components/admin/gerenciamento/Abas";
 
 const GerenciamentoPage = () => {
   return (
-    <Template>
+    <DashboardLayout>
         <Subheader titulo="Gerenciamento"/>
         <Abas />
-    </Template>
+    </DashboardLayout>
   );
 }
 
