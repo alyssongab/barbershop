@@ -14,18 +14,15 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
   const router = useRouter();
 
   useEffect(() => {
-    // Primeiro, esperamos a verificação inicial de autenticação terminar
     if (loading) {
-      return; // Não faz nada enquanto o estado de auth está sendo carregado
+      return; 
     }
 
-    // Se não estiver carregando e o usuário NÃO estiver autenticado, redireciona para o login
     if (!isAuthenticated) {
       router.push('/auth/login');
     }
-  }, [isAuthenticated, loading, router]); // O efeito roda sempre que esses valores mudam
+  }, [isAuthenticated, loading, router]);
 
-  // Se a autenticação ainda está carregando, exibe o componente de Loading
   if (loading) {
     return <Loading />;
   }

@@ -10,13 +10,11 @@ import ModalCancelar from "./ModalCancelar";
 import { Agendamento } from "@/types/agendamento";
 import { cancelarAgendamento } from "@/services/agendamentoService";
 
-// 1. Crie uma interface para definir as props que o componente recebe
 interface TabelaAgendamentosProps {
   agendamentos: Agendamento[];
-  onCancelSuccess: (idCancelado: number) => void; // Adicione a nova prop aqui
+  onCancelSuccess: (idCancelado: number) => void; 
 }
 
-// 2. Use a nova interface na definição do componente
 const TabelaAgendamentos = ({ agendamentos, onCancelSuccess }: TabelaAgendamentosProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState<Agendamento | null>(null);
