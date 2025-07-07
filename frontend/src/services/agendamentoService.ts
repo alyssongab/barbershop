@@ -1,5 +1,6 @@
 import api from './api';
 import { Agendamento } from '@/types/agendamento'; // Importa nosso novo tipo
+import { ProximoAgendamentoDTO } from "@/types/agendamento";
 
 // Busca os agendamentos do cliente logado
 export const getMeusAgendamentos = async (): Promise<Agendamento[]> => {
@@ -55,4 +56,9 @@ type Status = 'AGENDADO' | 'CONCLUIDO' | 'CANCELADO_PELO_CLIENTE' | 'CANCELADO_P
 export const atualizarStatusAgendamento = async (id: number, novoStatus: Status): Promise<Agendamento> => {
   const response = await api.patch(`/agendamentos/${id}/status`, { novoStatus });
   return response.data;
+};
+
+export const listarProximosDoBarbeiro = async (): Promise<ProximoAgendamentoDTO[]> => {
+    const response = await api.get('/agendamentos/proximos');
+    return response.data;
 };

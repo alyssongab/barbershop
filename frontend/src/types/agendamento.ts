@@ -25,3 +25,10 @@ export interface Agendamento {
   status: 'AGENDADO' | 'CONCLUIDO' | 'CANCELADO_PELO_CLIENTE' | 'CANCELADO_PELO_SALAO';
   avaliacao: Avaliacao | null;
 }
+
+export interface ProximoAgendamentoDTO {
+  id: number;
+  dataHora: string; // Vem como string ISO da API
+  nomeServico: string;
+  nomeCliente: string;
+}

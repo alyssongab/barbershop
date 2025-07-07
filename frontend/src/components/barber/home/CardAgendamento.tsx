@@ -1,7 +1,14 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar } from "lucide-react";
+import { ProximoAgendamentoDTO } from "@/types/agendamento";
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
-const CardAgendamento = () => {
+interface CardAgendamentoProps {
+    proximoAgendamento: ProximoAgendamentoDTO | undefined;
+}
+
+const CardAgendamento = ({ proximoAgendamento }: CardAgendamentoProps) => {
     return (
         <Card className="w-1/3 gap-1 transform transition-all duration-300">
             <CardHeader>
@@ -11,10 +18,19 @@ const CardAgendamento = () => {
                 </div>
             </CardHeader>
             <CardContent>
-                <div className="space-y-3">
-                    <h3 className="text-2xl font-bold text-[#140f0b]">Hoje - 11:00</h3>
-                    <p className="text-[#3d3939]">Ancelotti - Corte + Barba</p>
-                </div>
+                {proximoAgendamento ? (
+                    <div className="space-y-3">
+                        <h3 className="text-2xl font-bold text-[#140f0b]">
+                            {/* Formata a data e hora de forma amigável */}
+                            {format(new Date(proximoAgendamento.dataHora), "PPP 'às' HH:mm", { locale: ptBR })}
+                        </h3>
+                        <p className="text-[#3d3939]">{proximoAgendamento.nomeCliente} - {proximoAgendamento.nomeServico}</p>
+                    </div>
+                ) : (
+                    <div className="flex items-center justify-center h-full">
+                        <p className="text-gray-500">Nenhum agendamento próximo.</p>
+                    </div>
+                )}
             </CardContent>
         </Card>
     );
