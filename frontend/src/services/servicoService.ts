@@ -1,20 +1,33 @@
 import api from './api';
-import { Servico } from '@/types/servico'; // Importa o tipo que acabamos de criar
+import { Servico } from '@/types/servico'; // Usaremos o tipo que já criamos
 
-/**
- * Busca a lista completa de serviços disponíveis no backend.
- * * @returns Uma Promise que resolve para um array de objetos Servico.
- */
+// DTO para criar/atualizar um serviço
+export interface ServicoDTO {
+  nome: string;
+  descricao: string;
+  preco: number;
+  duracaoEstimadaMin: number;
+}
+
 export const getServicos = async (): Promise<Servico[]> => {
-  try {
-    // Faz a chamada GET para o endpoint /servicos
-    // Usamos o tipo genérico <Servico[]> para que o Axios/TypeScript saiba
-    // que `response.data` será um array de Serviços.
-    const response = await api.get<Servico[]>('/servicos');
-    return response.data;
-  } catch (error) {
-    console.error("Erro ao buscar a lista de serviços:", error);
-    // Lança o erro para que o componente que chamou a função possa tratá-lo (ex: mostrar uma mensagem)
-    throw error;
-  }
+  const response = await api.get<Servico[]>('/servicos');
+  return response.data;
+};
+
+export const createServico = async (data: ServicoDTO): Promise<Servico> => {
+  const response = await api.post<Servico>('/servicos', data);
+  return response.data;
+};
+
+export const updateServico = async (id: number, data: ServicoDTO): Promise<Servico> => {
+  const response = await api.put<Servico>(`/servicos/${id}`, data);
+  return response.data;
+};
+
+export const deleteServico = async (id: number): Promise<void> => {
+  await api.delete(`/servicos/${id}`);
+};
+
+export const toggleServicoStatus = async (id: number): Promise<void> => {
+  await api.patch(`/servicos/${id}/toggle-status`);
 };

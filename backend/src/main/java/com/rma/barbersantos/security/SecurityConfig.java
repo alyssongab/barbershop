@@ -61,20 +61,17 @@ public class SecurityConfig {
                         // --- ROTAS PÚBLICAS ---
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/usuarios").permitAll() // Exclusivo para cadastro de clientes
 
-                        // --- ROTAS DE LEITURA (GET) PARA USUÁRIOS AUTENTICADOS ---
+                        // --- ROTAS AUTENTICADAS (QUALQUER PERFIL) ---
+                        .requestMatchers(HttpMethod.GET, "/usuarios/me").authenticated()
                         .requestMatchers(HttpMethod.GET, "/servicos").authenticated()
                         .requestMatchers(HttpMethod.GET, "/usuarios/barbeiros").authenticated()
 
-                        // --- ROTAS DE ADMIN ---
-                        .requestMatchers(HttpMethod.POST, "/servicos").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/servicos/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/servicos/**").hasRole("ADMIN")
-                        .requestMatchers("/agendamentos/admin/**").hasRole("ADMIN")
+                        // --- ROTA DE ADMIN (MAIS SIMPLES AGORA) ---
+                        .requestMatchers("/admin/**").hasRole("ADMIN") // QUALQUER rota /admin/** é para ADMINS
 
                         // --- ROTAS DE BARBEIRO ---
-                        // AQUI ESTÁ A CORREÇÃO: trocamos '**' por '*'
                         .requestMatchers(HttpMethod.PATCH, "/agendamentos/*/status").hasRole("BARBEIRO")
                         .requestMatchers("/agendamentos/proximos").hasRole("BARBEIRO")
                         .requestMatchers("/agendamentos/minha-agenda").hasRole("BARBEIRO")
@@ -83,7 +80,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/agendamentos").hasRole("CLIENTE")
                         .requestMatchers("/agendamentos/meus-agendamentos").hasRole("CLIENTE")
 
-                        // Qualquer outra requisição precisa estar autenticada
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

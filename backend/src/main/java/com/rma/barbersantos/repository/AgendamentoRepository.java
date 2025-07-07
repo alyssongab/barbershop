@@ -32,4 +32,6 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Intege
     // Ordenado por Data/Hora Ascendente (Asc)"
     List<Agendamento> findFirst3ByBarbeiroAndStatusAndDataHoraAgendamentoAfterOrderByDataHoraAgendamentoAsc(
             Usuario barbeiro, StatusAgendamento status, LocalDateTime data);
+
+    boolean existsByBarbeiro(Usuario barbeiro);
 }

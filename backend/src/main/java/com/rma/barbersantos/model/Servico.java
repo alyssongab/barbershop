@@ -20,6 +20,7 @@ public class Servico {
     private String nome;
     private String descricao;
     private BigDecimal preco;
+    private boolean ativo = true;
 
     @Column(name = "duracao_estimada_min")
     private Integer duracaoEstimadaMin;

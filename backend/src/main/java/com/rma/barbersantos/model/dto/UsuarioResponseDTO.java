@@ -11,7 +11,8 @@ public record UsuarioResponseDTO(
         String email,
         String telefone,
         NivelAcesso nivelAcesso,
-        LocalDateTime dataCadastro
+        LocalDateTime dataCadastro,
+        boolean ativo
 ) {
     // Construtor para facilitar a conversão da Entidade para o DTO
     public UsuarioResponseDTO(Usuario usuario) {
@@ -21,7 +22,8 @@ public record UsuarioResponseDTO(
                 usuario.getEmail(),
                 usuario.getTelefone(),
                 usuario.getNivelAcesso(),
-                usuario.getDataCadastro()
+                usuario.getDataCadastro(),
+                usuario.isAtivo()
         );
     }
 }

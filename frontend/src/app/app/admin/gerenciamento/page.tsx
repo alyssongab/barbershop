@@ -1,6 +1,6 @@
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import Subheader from "@/components/layout/Subheader";
-import Abas from "@/components/admin/gerenciamento/Abas";
+import Gerenciamento from "@/components/admin/gerenciamento/Gerenciamento";
 import PrivateRoute from "@/components/auth/PrivateRoutes";
 
 const GerenciamentoPage = () => {
@@ -8,7 +8,7 @@ const GerenciamentoPage = () => {
     <PrivateRoute>
       <DashboardLayout>
           <Subheader titulo="Gerenciamento"/>
-          <Abas />
+          <Gerenciamento />
       </DashboardLayout>
     </PrivateRoute>
   );

@@ -6,6 +6,7 @@ import com.rma.barbersantos.services.ServicoService;
 import com.rma.barbersantos.services.exceptions.RecursoNaoEncontradoException;
 import com.rma.barbersantos.services.exceptions.RegraDeNegocioException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -67,6 +68,17 @@ public class ServicoController {
             return ResponseEntity.status(404).body(e.getMessage());
         } catch (RegraDeNegocioException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PatchMapping("/{id}/toggle-status")
+    @PreAuthorize("hasRole('ADMIN')") // Garante que só o admin pode chamar
+    public ResponseEntity<?> toggleStatus(@PathVariable Integer id) {
+        try {
+            servicoService.toggleStatus(id);
+            return ResponseEntity.noContent().build();
+        } catch (RecursoNaoEncontradoException e) {
+            return ResponseEntity.notFound().build();
         }
     }
 }

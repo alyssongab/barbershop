@@ -66,5 +66,11 @@ public class ServicoService {
 
         servicoRepository.deleteById(Long.valueOf(id));
     }
+
+    public void toggleStatus(Integer id) {
+        Servico servico = buscarPorId(id); // Reutiliza o método que já temos
+        servico.setAtivo(!servico.isAtivo()); // Inverte o status atual
+        servicoRepository.save(servico);
+    }
 }
 

@@ -35,6 +35,7 @@ public class Usuario implements UserDetails { // Implementa a interface UserDeta
     private NivelAcesso nivelAcesso;
     @Column(name = "data_cadastro", updatable = false)
     private LocalDateTime dataCadastro;
+    private boolean ativo = true;
 
     @PrePersist
     protected void onCreate() {
@@ -78,6 +79,6 @@ public class Usuario implements UserDetails { // Implementa a interface UserDeta
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.ativo;
     }
 }

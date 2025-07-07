@@ -7,4 +7,5 @@ export interface Servico {
   descricao: string;
   preco: number;
   duracaoEstimadaMin: number;
+  ativo: boolean
 }
