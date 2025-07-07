@@ -1,19 +1,26 @@
 "use client";
 
+import { useState } from "react";
+import { format } from 'date-fns';
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Table, TableRow, TableHead, TableHeader, TableBody, TableCell } from "@/components/ui/table";
-import { Button } from "../../ui/button";
+import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
 import ModalAvaliar from "./ModalAvaliar";
-import { useState } from "react";
+import { Agendamento } from "@/types/agendamento"; // Importa o nosso tipo
 
-const TabelaHistorico = () => {
+// 1. Define as props que o componente recebe
+interface TabelaHistoricoProps {
+  historico: Agendamento[];
+  onAvaliacaoSuccess: () => void; // Função para recarregar os dados
+}
 
+const TabelaHistorico = ({ historico, onAvaliacaoSuccess }: TabelaHistoricoProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [selectedAppointment, setSelectedAppointment] = useState<Agendamento | null>(null);
 
-  const handleOpenModal = (appointment: any) => {
-    setSelectedAppointment(appointment)
+  const handleOpenModal = (appointment: Agendamento) => {
+    setSelectedAppointment(appointment);
     setIsModalOpen(true);
   };
 
@@ -22,99 +29,98 @@ const TabelaHistorico = () => {
     setSelectedAppointment(null);
   };
 
-  const appointments = [
-    {
-      id: 1,
-      date: "08/06/2025",
-      time: "17:30",
-      service: "Corte degradê",
-      barber: "Luiz David",
-      value: "R$ 40,00",
-      rate: 5
-    },
-    {
-      id: 2,
-      date: "10/06/2025",
-      time: "19:00",
-      service: "Corte + Barba + Sobrancelha",
-      barber: "Matheus Victor",
-      value: "R$ 80,00",
-      rate: null
-    },
-    {
-      id: 3,
-      date: "11/06/2025",
-      time: "16:00",
-      service: "Corte + Barba + Sobrancelha",
-      barber: "Bob Esponja",
-      value: "R$ 80,00",
-      rate: "cancelado"
-    },
-  ]
+  const renderCellAvaliacao = (appointment: Agendamento) => {
+    // Caso 1: Agendamento foi cancelado
+    if (appointment.status.startsWith("CANCELADO")) {
+      return <span className="text-gray-400 opacity-60">Cancelado</span>;
+    }
 
-    return (
-        <Card>
-            <CardHeader>
-              <CardTitle className="text-lg font-semibold text-[#3d3939]">Histórico de Agendamentos</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <Table>
-                    <TableHeader>
-                        <TableRow className="border-b border-[#e4e4e4]">
-                            <TableHead className="text-[#3d3939] font-medium">Data</TableHead>
-                            <TableHead className="text-[#3d3939] font-medium">Horário</TableHead>
-                            <TableHead className="text-[#3d3939] font-medium">Serviço</TableHead>
-                            <TableHead className="text-[#3d3939] font-medium">Barbeiro</TableHead>
-                            <TableHead className="text-[#3d3939] font-medium">Valor</TableHead>
-                            <TableHead className="text-[#3d3939] font-medium">Avaliação</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                    {appointments.map((appointment, index) => (
-                        <TableRow key={index} className="border-b border-[#e4e4e4] text-base">
-                            <TableCell className="text-[#3d3939]">{appointment.date}</TableCell>
-                            <TableCell className="text-[#3d3939]">{appointment.time}</TableCell>
-                            <TableCell className="text-[#3d3939]">{appointment.service}</TableCell>
-                            <TableCell className="text-[#3d3939]">{appointment.barber}</TableCell>
-                            <TableCell className="text-[#3d3939] font-medium">{appointment.value}</TableCell>
-                            <TableCell className="flex">
-                              {typeof appointment.rate === "number" && (
-                                <>
-                                  {[1, 2, 3, 4, 5].map((star) => (
-                                    <Star
-                                      key={star}
-                                      className={`w-5 h-5 ${star <= appointment.rate ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
-                                      fill={star <= appointment.rate ? "yellow" : "none"}
-                                    />
-                                  ))}
-                                </>
-                              )}
-                              {appointment.rate === null && (
-                                <Button 
-                                size="sm" 
-                                variant="outline" 
-                                onClick={() => handleOpenModal(appointment)} 
-                                className="bg-black text-white hover:bg-[#4d4d4d] hover:text-white cursor-pointer">
-                                  Avaliar
-                                </Button>
-                              )}
-                              {appointment.rate === "cancelado" && (
-                                <span className="text-gray-400 opacity-60">Cancelado</span>
-                              )}
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                    </TableBody>
-                </Table>
-            </CardContent>
-            {isModalOpen && selectedAppointment && ( 
-            <ModalAvaliar
-              appointment={selectedAppointment}  
-              onClose={handleCloseModal} 
-              /> 
+    // Caso 2: Agendamento concluído e JÁ AVALIADO
+    if (appointment.status === "CONCLUIDO" && appointment.avaliacao) {
+      return (
+        <div className="flex">
+          {[1, 2, 3, 4, 5].map((star) => (
+            <Star
+              key={star}
+              className={`w-5 h-5 ${star <= appointment.avaliacao!.nota ? "text-yellow-400" : "text-gray-300"}`}
+              fill={star <= appointment.avaliacao!.nota ? "currentColor" : "none"}
+            />
+          ))}
+        </div>
+      );
+    }
+    
+    // Caso 3: Agendamento concluído e AINDA NÃO AVALIADO
+    if (appointment.status === "CONCLUIDO" && !appointment.avaliacao) {
+      return (
+        <Button 
+          size="sm" 
+          variant="outline" 
+          onClick={() => handleOpenModal(appointment)} 
+          className="bg-black text-white hover:bg-[#4d4d4d] hover:text-white cursor-pointer"
+        >
+          Avaliar
+        </Button>
+      );
+    }
+
+    // Caso padrão (não deve acontecer no histórico, mas é uma boa prática)
+    return null;
+  };
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-lg font-semibold text-[#3d3939]">Histórico de Agendamentos</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Table>
+          <TableHeader>
+            <TableRow className="border-b border-[#e4e4e4]">
+              <TableHead className="text-[#3d3939] font-medium">Data</TableHead>
+              <TableHead className="text-[#3d3939] font-medium">Horário</TableHead>
+              <TableHead className="text-[#3d3939] font-medium">Serviço</TableHead>
+              <TableHead className="text-[#3d3939] font-medium">Barbeiro</TableHead>
+              <TableHead className="text-[#3d3939] font-medium">Valor</TableHead>
+              <TableHead className="text-[#3d3939] font-medium">Avaliação</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {historico.length > 0 ? historico.map((appointment) => (
+              <TableRow key={appointment.id} className="border-b border-[#e4e4e4] text-base">
+                <TableCell className="text-[#3d3939]">{format(new Date(appointment.dataHoraAgendamento), 'dd/MM/yyyy')}</TableCell>
+                <TableCell className="text-[#3d3939]">{format(new Date(appointment.dataHoraAgendamento), 'HH:mm')}</TableCell>
+                <TableCell className="text-[#3d3939]">{appointment.servico.nome}</TableCell>
+                <TableCell className="text-[#3d3939]">{appointment.barbeiro.nome}</TableCell>
+                <TableCell className="text-[#3d3939] font-medium">
+                  {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(appointment.servico.preco)}
+                </TableCell>
+                <TableCell>
+                  {renderCellAvaliacao(appointment)}
+                </TableCell>
+              </TableRow>
+            )) : (
+              <TableRow>
+                <TableCell colSpan={6} className="text-center text-gray-500 py-4">
+                  Nenhum histórico de agendamentos encontrado.
+                </TableCell>
+              </TableRow>
             )}
-        </Card>
-    );
-}
+          </TableBody>
+        </Table>
+      </CardContent>
+      {isModalOpen && selectedAppointment && (
+        <ModalAvaliar
+          appointment={selectedAppointment}
+          onClose={handleCloseModal}
+          onAvaliacaoSuccess={() => {
+            onAvaliacaoSuccess(); // Chama a função do pai para recarregar os dados
+            handleCloseModal(); // Fecha o modal
+          }}
+        />
+      )}
+    </Card>
+  );
+};
 
 export default TabelaHistorico;

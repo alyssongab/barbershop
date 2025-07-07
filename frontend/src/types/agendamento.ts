@@ -11,6 +11,11 @@ export interface ServicoSimples {
   preco: number;
 }
 
+export interface Avaliacao {
+  nota: number;
+  comentario: string;
+}
+
 export interface Agendamento {
   id: number;
   cliente: UsuarioSimples;
@@ -18,4 +23,5 @@ export interface Agendamento {
   servico: ServicoSimples;
   dataHoraAgendamento: string; // Vem como string ISO da API
   status: 'AGENDADO' | 'CONCLUIDO' | 'CANCELADO_PELO_CLIENTE' | 'CANCELADO_PELO_SALAO';
+  avaliacao: Avaliacao | null;
 }
