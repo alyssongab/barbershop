@@ -8,7 +8,7 @@ Sistema de gestão de barbearia - Projeto final da disciplina Desenvolvimento We
 
 O Barbearia Santos é um sistema web pensado para facilitar o dia a dia de barbearias modernas, oferecendo:
 
-- **Agendamento online** (wizard intuitivo, horários livres em tempo real)
+- **Agendamento online** (wizard intuitivo de agendamento)
 - **Gestão de barbeiros e equipe**
 - **Painel administrativo**
 - **Experiência amigável de agendamento e avaliação**
