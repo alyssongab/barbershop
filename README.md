@@ -89,6 +89,10 @@ cd backend
 
 !Importante:
 # criar arquivo application-dev.properties com usuario e senha do banco, além da chave jwt
+# ex:
+# spring.datasource.username=(SEU USUARIO)
+# spring.datasource.password=(SUA SENHA)
+# api.security.token.secret=(SUA CHAVE CRIPTOGRAFADA)
 ```
 
 ### 3. Frontend (Next)
