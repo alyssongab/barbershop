@@ -88,7 +88,7 @@ cd backend
     Module content root e Escolha o arquivo lombok baixado
 
 !Importante:
-criar arquivo application-dev.properties com usuario e senha do banco, além da chave jwt
+# criar arquivo application-dev.properties com usuario e senha do banco, além da chave jwt
 ```
 
 ### 3. Frontend (Next)
