@@ -74,7 +74,7 @@ cd backend
 ./mvnw spring-boot:run
 
 # (IntelliJ)
-# caso o lombok dê conflito, baixar e adicionar em project's structure (lib)
+# caso o lombok dê conflito, baixar manualmente o jar e adicionar em project's structure (lib)
 # File > Settings > Build, Execution, Deployment > Compiler > Annotation Processors
 
     Marque a opção:
